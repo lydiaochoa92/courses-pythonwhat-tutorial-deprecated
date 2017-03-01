@@ -355,7 +355,7 @@ Ex().test_student_typed(r"areas\[\s*0\s*:\s*6\s*]",
 --- type:NormalExercise lang:python xp:100 skills:2 key:b67a5ea0d3
 ## dictionary
 
-The `countries` and `capitals` lists are again available in the script. It's your job to convert this data to a dictionary where the country names are the keys and the capitals are the corresponding values. As a refresher, here is a recipe for creating a dictionary:
+Another common type is a dictionary. As a refresher, here is a recipe for creating a dictionary:
 
 ```
 my_dict = {
@@ -364,15 +364,15 @@ my_dict = {
 }
 ```
 
-In this recipe, both the keys and the values are strings. This will also be the case for this exercise.
+In this recipe, both the keys and the values are strings. This will also be the case for the example exercise.
 
 *** =instructions
 - With the strings in `countries` and `capitals`, create a dictionary called `europe` with 4 key:value pairs. Beware of capitalization! Make sure you use lowercase characters everywhere.
-- Print out `europe` to see if the result is what you expected.
+
 
 *** =hint
 - Start with `{ "spain":"madrid", ... }`. Include three more key:value pairs in a similar fashion.
-- Don't forget to use quotation marks for strings!
+
 
 *** =sample_code
 ```{python}
@@ -381,9 +381,6 @@ countries = ['spain', 'france', 'germany', 'norway']
 capitals = ['madrid', 'paris', 'berlin', 'oslo']
 
 # From string in countries and capitals, create dictionary europe
-
-
-# Print europe
 
 ```
 
@@ -395,28 +392,34 @@ capitals = ['madrid', 'paris', 'berlin', 'oslo']
 
 # From string in countries and capitals, create dictionary europe
 europe = {'spain':'madrid', 'france':'paris', 'germany':'berlin', 'norway':'oslo' }
-
-# Print europe
-print(europe)
 ```
 
 *** =sct
 ```{python}
 
-msg = "Did you correctly create the dictionary `europe`?"
-test_object("europe", undefined_msg = msg, incorrect_msg = msg)
+undef_msg = "Did you define the variable `europe`?"
+incorrect_msg = "Did you set `europe` to the correct dictionary?"
+Ex().test_object("europe", undefined_msg = undef_msg, incorrect_msg = incorrect_msg)
 
-msg = "Have you correctly printed out `europe`?"
-test_function("print", 1, not_called_msg = msg, incorrect_msg = msg)
+# Alternatively, could use more fine-grained checks -------------------------------------
 
-success_msg("Great! Now that you've built your first dictionaries, let's get serious!")
+# Example 1: check that an individual key exists
+Ex().check_object("europe").has_key("spain", key_missing_msg = "Missing key spain")
+
+# Example 2: check a key's value
+Ex().check_object("europe").has_equal_key("france", 
+                                          incorrect_value_msg = "Incorrect value",
+                                          key_missing_msg = "Missing key france")
+
+# Example 3: check that europe is a dict, and that it's value is equal between student and solution results
+Ex().check_object("europe", undef_msg).is_instance(dict).has_equal_value(incorrect_msg)
 ```
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:6048cbed18
 ## dictionary item
 
-If the keys of a dictionary are chosen wisely, accessing the values in a dictionary is easy and intuitive. For example, to get the capital for France from `europe` you can use:
+The previous exercise considered testing a dictionary, including whether individual items in a dictionary were correct. However, sometimes you want to test that students performed the **selection** of a dictionary item. For example, using the dictionary from the previous exercise:
 
 ```
 europe['france']
@@ -424,9 +427,10 @@ europe['france']
 
 Here, `'france'` is the key and `'paris'` the value is returned.
 
+**Below is a potential scenario for teaching students to print the keys, and an item of a dictionary.**
+
 *** =instructions
 - Check out which keys are in `europe` by calling the [`keys()`](https://docs.python.org/3/library/stdtypes.html#dict.keys) method on `europe`. Print out the result.
-- Print out the value that belongs to the key `'norway'`.
 
 *** =hint
 - `europe.keys()` gives you the keys in `europe`. Make sure to wrap a [`print()`](https://docs.python.org/3/library/functions.html#print) call around it.
@@ -458,15 +462,28 @@ print(europe['norway'])
 
 *** =sct
 ```{python}
-test_function("europe.keys")
+# check that students called europe.keys() at least once
+# Note: we set signature=False below, othewise pythonwhat will try to read the function signature
+#       of europe.keys, see http://pythonwhat.readthedocs.io/en/latest/part_checks.html#matching-signatures
+Ex().check_function("europe.keys", 0, signature=False, missing_msg = "did you get the keys of europe using `europe.keys()`")
 
+# check first occurence of print function, make sure it was given the right code
 msg = "For the first printout, use `print(europe.keys())` to print out all keys of `europe`."
-test_function("print", 1, not_called_msg = msg, incorrect_msg = msg)
+(Ex().check_function("print", 0, missing_msg = msg)      # get code for first print call
+     .check_args(0)                                      # get code for first positional argument
+     .has_equal_ast(incorrect_msg = "Did you call `europe.keys()`?")   # do student and solution have same abstract syntax?
+     )
+
+# Note: could replace has_equal_ast with has_equal_value above, which will re-execute the code for the first
+#       positional argument, and see if the string outputs match between student and solution. This is shown
+#       below for the second print statement
 
 msg = "For the second printout, use `print(europe['norway'])` to print out the value belonging to the key `'norway'`."
-test_function("print", 2, not_called_msg = msg, incorrect_msg = msg)
+(Ex().check_function("print", 1, missing_msg = msg)      # get code for second print call
+     .check_args(0)                                      # get code for second positional argument
+     .has_equal_value(incorrect_msg = "Did you call `europe['norway']`?")   # do student and solution have same value using ==?
+     )
 
-success_msg("Good job, now you're warmed up for some more.")
 ```
 
 
