@@ -340,16 +340,17 @@ test_object("downstairs", incorrect_msg = "Your definition of `downstairs` is in
 # test variable upstairs
 test_object("upstairs", incorrect_msg = "Your definition of `upstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `6:10` where the dots are, for example.")
 
-# Alternatively, we could be more specific and make sure they typed "areas[0:6]", with
-# Ex().test_student_typed("areas[0:6]")
-
+# Alternatively, we could be more specific and make sure they typed "areas[0:6]" somewhere in their code, with
+#
+#     Ex().test_student_typed("areas[0:6]", not_typed_msg = "did you slice areas, using `areas[0:6]`?")
+#
 # However, this would fail valid solutions like "downstairs = areas[0 : 6]". In order
-# to test that they sliced areas more flexibly, you can test the abstract representation of slicing
-# with the following
-# Ex().has_equal_ast("areas[0:6]")
+# to test that they sliced areas more flexibly, you can use regular expressions.
+# see https://docs.python.org/3/library/re.html
+Ex().test_student_typed(r"areas\[\s*0\s*:\s*6\s*]", 
+                        pattern = True,
+                        not_typed_msg = "did you slice areas, using `areas[0:6]`?")
 ```
-
-
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:b67a5ea0d3
 ## dictionary
