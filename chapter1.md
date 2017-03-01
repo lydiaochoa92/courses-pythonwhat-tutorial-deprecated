@@ -261,8 +261,8 @@ Ex().test_object("areas", incorrect_msg = "Define `areas` as the list containing
 #           [1, 2, 3] == [1.0, 2, 3]
 #           [1, 2, 3] == [True, 2, 3]
 #
-# If you wanted to be very specific, you could use one of the following tests.
-# Option 1: see if string output is the same. This is similar to comparing str('areas').
+# If you wanted to be very specific, you could use one of the following tests, which
+# is similar to comparing str('areas').
 Ex().check_object('areas').is_instance(list).has_equal_output()
 ```
 
@@ -270,13 +270,15 @@ Ex().check_object('areas').is_instance(list).has_equal_output()
 --- type:NormalExercise lang:python xp:100 skills:2 key:7f08642d18
 ## list slicing
 
-Selecting single values from a list is just one part of the story. It's also possible to _slice_ your list, which means selecting multiple elements from your list. Use the following syntax:
+Checking a list is just one part of the story. It's also possible to _slice_ your list, which means selecting multiple elements from your list--using the following syntax:
 
 ```
 my_list[start:end]
 ```
 
 The `start` index will be included, while the `end` index is _not_.
+
+**Below is a potential scenario for teaching students to slice a list.**
 
 The code sample below shows an example. A list with `"b"` and `"c"`, corresponding to indexes 1 and 2, are selected from a list `x`:
 
@@ -290,12 +292,10 @@ The elements with index 1 and 2 are included, while the element with index 3 is 
 *** =instructions
 - Use slicing to create a list, `downstairs`, that contains the first 6 elements of `areas`.
 - Do a similar thing to create a new variable, `upstairs`, that contains the last 4 elements of `areas`.
-- Print both `downstairs` and `upstairs` using [`print()`](https://docs.python.org/3/library/functions.html#print).
 
 *** =hint
 - Use the brackets `[0:6]` to build `downstairs`.
-- Use the barckets `[6:10]` to build `upstairs`.
-- Simply add two [`print()`](https://docs.python.org/3/library/functions.html#print) calls to the script to print out `downstairs` and `upstairs`.
+- Use the brackets `[6:10]` to build `upstairs`.
 
 *** =pre_exercise_code
 ```{python}
@@ -312,8 +312,6 @@ areas = ["hallway", 11.25, "kitchen", 18.0, "living room", 20.0, "bedroom", 10.7
 
 # Use slicing to create upstairs
 
-
-# Print out downstairs and upstairs
 ```
 
 *** =solution
@@ -327,23 +325,28 @@ downstairs = areas[0:6]
 # Use slicing to create upstairs
 upstairs = areas[6:10]
 
-# Print out downstairs and upstairs
-print(downstairs)
-print(upstairs)
 ```
 
 *** =sct
 ```{python}
+# This test makes sure that students are warned if they delete parts of the sample code.
 msg = "Don't remove or edit the predefined `areas` list."
 test_object("areas", undefined_msg = msg, incorrect_msg = msg)
 
+# Since each slice is assigned to a variable, we can test those variables with test_object
+# test variable downstairs
 test_object("downstairs", incorrect_msg = "Your definition of `downstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `0:6` where the dots are, for example.")
+
+# test variable upstairs
 test_object("upstairs", incorrect_msg = "Your definition of `upstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `6:10` where the dots are, for example.")
 
-test_function("print", 1, incorrect_msg = "First, print out `downstairs` using `print(downstairs)`.")
-test_function("print", 2, incorrect_msg = "First, print out `upstairs` using `print(upstairs)`.")
+# Alternatively, we could be more specific and make sure they typed "areas[0:6]", with
+# Ex().test_student_typed("areas[0:6]")
 
-success_msg("Great!")
+# However, this would fail valid solutions like "downstairs = areas[0 : 6]". In order
+# to test that they sliced areas more flexibly, you can test the abstract representation of slicing
+# with the following
+# Ex().has_equal_ast("areas[0:6]")
 ```
 
 
