@@ -490,23 +490,22 @@ msg = "For the second printout, use `print(europe['norway'])` to print out the v
 --- type:NormalExercise lang:python xp:100 skills:2 key:84cab9d170
 ## numpy array
 
-In this chapter, we're going to dive into the world of baseball. Along the way, you'll get comfortable with the basics of Numpy, a powerful package to do data science.
+In this exercise we'll consider how to test arrays from Numpy, a powerful package to do data science.
+
+**Below is a potential scenario for teaching students to use numpy arrays.**
 
 A list `baseball` has already been defined in the Python script, representing the height of some baseball players in centimeters. Can you add some code here and there to create a Numpy array from it?
 
 *** =instructions
-- Import the `numpy` package as `np`, so that you can refer to `numpy` with `np`.
 - Use [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array) to create a Numpy array from `baseball`. Name this array `np_baseball`.
 - Print out the type of `np_baseball` to check that you got it right.
 
 *** =hint
 - `import numpy as np` will do the trick. Now, you have to use `np.fun_name()` whenever you want to use a Numpy function.
 - [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array) should take on input `baseball`. Assign the result of the function call to `np_baseball`.
-- To print out the type of a variable `x`, simply type `print(type(x))`.
 
 *** =pre_exercise_code
 ```{python}
-import numpy as np
 ```
 
 *** =sample_code
@@ -515,12 +514,9 @@ import numpy as np
 baseball = [180, 215, 210, 210, 188, 176, 209, 200]
 
 # Import the numpy package as np
-
+import numpy as np
 
 # Create a Numpy array from baseball: np_baseball
-
-
-# Print out type of np_baseball
 
 ```
 
@@ -534,35 +530,25 @@ import numpy as np
 
 # Create a Numpy array from baseball: np_baseball
 np_baseball = np.array(baseball)
-
-# Print out type of np_baseball
-print(type(np_baseball))
 ```
 
 *** =sct
 ```{python}
-msg = "You don't have to change or remove the predefined variables."
-test_object("baseball", undefined_msg = msg, incorrect_msg = msg)
+array_missing_msg = "Be sure to call [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array)."
 
-test_import("numpy")
-
-test_object("np_baseball", do_eval = False)
-test_function("numpy.array", not_called_msg = "Be sure to call [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array).",
-                             incorrect_msg = "You should call [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array) as follows: `np.array(baseball)`.")
-test_object("np_baseball", incorrect_msg = "Assign the correct value to `np_baseball`.")
-
-msg = "Make sure to print out the type of `np_baseball` like this: `print(type(np_baseball))`."
-test_function("type", 1, incorrect_msg = msg)
-test_function("print", 1, incorrect_msg = msg)
-
-success_msg("Great job!")
+# Test that np_baseball exists, save the chain as obj, to run further tests on later
+obj = Ex().check_object("np_baseball")
+# Test that numpy.array function was called at least once
+Ex().check_function('numpy.array', 0, missing_msg = array_missing_msg)
+# Test that the value of np_baseball matches between solution and student results
+obj.has_equal_value(incorrect_msg = "Incorrect value.")
 ```
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:fcb2a9007b
 ## numpy array slice
 
-You've seen it with your own eyes: Python lists and Numpy arrays sometimes behave differently. Luckily, there are still certainties in this world. For example, subsetting (using the square bracket notation on lists or arrays) works exactly the same. To see this for yourself, try the following lines of code in the IPython Shell:
+As with lists and dictionaries, you may sometimes want to ensure that someone has subset, or sliced a numpy array. For example:
 
 ```
 x = ["a", "b", "c"]
@@ -571,6 +557,10 @@ x[1]
 np_x = np.array(x)
 np_x[1]
 ```
+
+Thus, slicing a numpy array is similar to both lists and dictionaries, and in fact is indistinguishable based on the code alone (under the hood, everything in python is an object, and all slicing uses the special object method [\_\_getitem\_\_](https://docs.python.org/3/reference/datamodel.html#object.__getitem__)).
+
+**Below is a potential scenario for teaching students to use numpy arrays.**
 
 The script on the right already contains code that imports `numpy` as `np`, and stores both the height and weight of the MLB players as Numpy arrays.
 
@@ -630,30 +620,20 @@ print(np_height[100:111])
 *** =sct
 ```{python}
 
-test_import("numpy", same_as = False)
-
-msg = "You don't have to change or remove the predefined variables."
-test_object("np_height", undefined_msg = msg, incorrect_msg = msg)
-test_object("np_weight", undefined_msg = msg, incorrect_msg = msg)
-
-test_function("print", 1,
-              incorrect_msg = "For the first printout, subset `np_weight` to select the 50th element.")
-
-test_function("print", 2,
-              incorrect_msg = "For the second printout, subset `np_height` to select the 100th to 110th element, included. You can use the slicing operator: `:`, just make sure to put in the correct ending index.")
-
-success_msg("Nice! Time to learn something new: 2D Numpy arrays!")
+# See the exercise for testing list slicing in this chapter for details and further tests
+Ex().check_function('print', 0).check_args(0).has_equal_value()
+Ex().check_function('print', 1).check_args(0).has_equal_value()
 ```
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:532155cd37
 ## pandas data frame
 
-Pandas is an open source library, providing high-performance, easy-to-use data structures and data analysis tools for Python. Sounds promising!
+Pandas is an open source library, providing high-performance, easy-to-use data structures and data analysis tools for Python. 
 
 The DataFrame is one of Pandas' most important data structures. It's basically a way to store tabular data, where you can label the rows and the columns. One way to build a DataFrame is from a dictionary.
 
-In the exercises that follow you will be working with vehicle data in different countries. Each observation corresponds to a country and the columns give information about the number of vehicles per capita, whether people drive left or right, and so on.
+The exercises that follow has students work with vehicle data in different countries. Each observation corresponds to a country and the columns give information about the number of vehicles per capita, whether people drive left or right, and so on.
 
 Three lists are defined in the script:
 - `names`, containing the country names for which data is available.
@@ -663,17 +643,10 @@ Three lists are defined in the script:
 Each dictionary key is a column label and each value is a list which contains the column elements.
 
 *** =instructions
-- Import `pandas` as `pd`.
-- Use the pre-defined lists to create dictionary, called `my_dict`. There should be three key value pairs:
-  + key `'country'` and value `names`.
-  + key `'drives_right'` and value `dr`.
-  + key `'cars_per_cap'` and value `cpc`.
 - Use [`pd.DataFrame()`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html) to turn your dict into a DataFrame called `cars`.
 - Print out `cars` and see how beautiful it is.
 
 *** =hint
-- `import pandas as pd` imports `pandas` under the local name `pd`.
-- A dictionary with only the country names would look like this: `my_dict = { 'country':names }`. Can you add some more key:value pairs?
 - `pd.DataFrame(my_dict)` will produce a DataFrame that you can store as `cars`.
 - To print out a variable `x` type `print(x)` on a new line in your script.
 
@@ -684,14 +657,11 @@ names = ['United States', 'Australia', 'Japan', 'India', 'Russia', 'Morocco', 'E
 dr =  [True, False, False, False, True, True, True]
 cpc = [809, 731, 588, 18, 200, 70, 45]
 
-# Import pandas as pd
-
-
 # Create dictionary my_dict with three key:value pairs: my_dict
-
+my_dict = { 'country':names, 'drives_right':dr, 'cars_per_cap':cpc }
 
 # Build a DataFrame cars from my_dict: cars
-
+import pandas as pd
 
 # Print cars
 
@@ -704,13 +674,11 @@ names = ['United States', 'Australia', 'Japan', 'India', 'Russia', 'Morocco', 'E
 dr =  [True, False, False, False, True, True, True]
 cpc = [809, 731, 588, 18, 200, 70, 45]
 
-# Import pandas as pd
-import pandas as pd
-
 # Create dictionary my_dict with three key:value pairs: my_dict
 my_dict = { 'country':names, 'drives_right':dr, 'cars_per_cap':cpc }
 
 # Build a DataFrame cars from my_dict: cars
+import pandas as pd
 cars = pd.DataFrame(my_dict)
 
 # Print cars
@@ -719,26 +687,19 @@ print(cars)
 
 *** =sct
 ```{python}
-msg = "You don't have to change or remove `names`, it was defined for you."
-test_object("names", undefined_msg = msg, incorrect_msg = msg)
-
-msg = "You don't have to change or remove `dr`, it was defined for you."
-test_object("dr", undefined_msg = msg, incorrect_msg = msg)
-
-msg = "You don't have to change or remove `cpc`, it was defined for you."
-test_object("cpc", undefined_msg = msg, incorrect_msg = msg)
-
-msg = "Have you correctly imported `pandas` as `pd`? Use `import pandas as pd`."
-test_import("pandas", not_imported_msg = msg, incorrect_as_msg = msg)
-
-msg = "You can create a dictionary as follows: `{'country': names, 'drives_right': dr, 'cars_per_cap':cpc}`. Make sure to assign it to `my_dict`."
-test_object("my_dict", undefined_msg = msg, incorrect_msg = msg)
-
+# First, you can test a DataFrame using test_object. However, we show the function test_data_frame here.
+# We illustrate using test_data_frame to test only one column, drives_right, and then check_object to show
+# how you can do a similar test using the other two columns.
 msg = "You can create a pandas DataFrame as follows: `pd.DataFrame(my_dict)`. Make sure to store it as `cars`."
-test_object("cars", undefined_msg = msg, incorrect_msg = msg)
+Ex().test_data_frame("cars", 
+                     columns = ['drives_right'],
+                     undefined_msg = msg, not_data_frame_msg = msg,
+                     incorrect_msg = msg)
 
-msg = "Don't forget to print out the `cars` DataFrame with [`print()`](https://docs.python.org/3/library/functions.html#print)."
-test_function("print",  not_called_msg = msg, incorrect_msg = msg)
+# Alternatively, can use more generic check functions
+Ex().check_object("cars").has_equal_key("country").has_equal_key("cars_per_cap")
 
-success_msg("Good job! Notice that the columns of `cars` can be of different types. This was not possible with 2D Numpy arrays!")
+# Finally, check that it was used inside the print function
+#msg = "Don't forget to print out the `cars` DataFrame with [`print()`](https://docs.python.org/3/library/functions.html#print)."
+Ex().check_function("print", 0).check_args(0).has_equal_value()
 ```
