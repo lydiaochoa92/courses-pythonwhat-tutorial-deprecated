@@ -9,33 +9,30 @@ attachments :
 
 ## int
 
-In Python, a variable allows you to refer to a value with a name. To create a variable use `=`, like this example:
+[see test_object docs](http://pythonwhat.readthedocs.io/en/latest/simple_tests/test_object.html)
 
-```
-x = 5
-```
+It is very common for submission correctness tests (SCTs) to check the following:
 
-You can now use the name of this variable, `x`, instead of the actual value, `5`.
+1. that someone defined a variable (e.g. `savings = 100`)
+2. that the variable has the correct value
+
+This is where `test_object` comes in.
+If you need more fine grained control, use the functions `check_object`, `is_instance`, and `has_equal_value`.
+
 
 *** =instructions
 - Create a variable `savings` with the value 100.
-- Check out this variable by typing `print(savings)` in the script.
 
 *** =hint
 - Type `savings = 100` to create the variable `savings`.
-- After creating the variable `savings`, you can type `print(savings)`.
 
 *** =pre_exercise_code
 ```{python}
-# pec
 ```
 
 *** =sample_code
 ```{python}
 # Create a variable savings
-
-
-# Print out savings
 
 ```
 
@@ -43,41 +40,40 @@ You can now use the name of this variable, `x`, instead of the actual value, `5`
 ```{python}
 # Create a variable savings
 savings = 100
-
-# Print out savings
-print(savings)
 ```
 
 *** =sct
 ```{python}
-test_object("savings", incorrect_msg = "Assign `100` to the variable `savings`.")
+# test that savings is defined, and that its value matches the solution
+# note: the variable 'savings' is checked in the submission and solution code
+#       AFTER running all solution and submission code.
+Ex().test_object("savings", 
+                 incorrect_msg = "Assign `100` to the variable `savings`.",
+                 undefined_msg = "Did you define the variable `savings`?")
 
-# MC-Note: Can remove test_function below and mentions of print, since this is first ex in tutorial
-test_function("print", incorrect_msg = "Print out `savings`, the variable you created, using `print(savings)`.")
-success_msg("Great! Let's try to do some calculations with this variable now!")
+# if we only included the above test, it would allow "savings = 100.0", which is a float :(.
+# in order to be very particular, and select only an integer, you can use the more fine-grained
+# check functions
+# NOTE: comment out test_object above to see each piece in action.
+Ex().check_object("savings", missing_msg = "Did you define the variable savings?") \
+    .is_instance(int, "Is it an integer?") \
+    .has_equal_value("Assign it the value `100`")
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:c7bbacb2a2
 
 ## float
 
-Remember how you calculated the money you ended up with after 7 years of investing $100? You did something like this:
+In the previous exercise we tested that a variable, `savings` was defined as the integer `100`.
 
-```
-100 * 1.10 ** 7
-```
+Here, we use the same SCTs to test the case where a new variable `factor` it should be the `float` `1.10`.
 
-Instead of calculating with the actual values, you can use variables instead. The `savings` variable you've created in the previous exercise represents the $100 you started with. It's up to you to create a new variable to represent `1.10` and then redo the calculations!
 
 *** =instructions
-- Create a variable `factor`, equal to `1.10`.
-- Use `savings` and `factor` to calculate the amount of money you end up with after 7 years. Store the result in a new variable, `result`.
-- Print out the value of `result`.
+- Create a variable `savings`, equal to `1.10`.
 
 *** =hint
-- To create the variable `factor`, use `factor = 1.10`.
-- In the example code block of the assignment, replace `100` with `savings` and `1.10` with `factor`: `savings * factor ** 7`.
-- Use the [`print()`](https://docs.python.org/3/library/functions.html#print) function to print the value of a variable.
+- To create the variable `savings`, use `savings = 1.10`.
 
 *** =pre_exercise_code
 ```{python}
@@ -91,11 +87,6 @@ savings = 100
 
 # Create a variable factor
 
-
-# Calculate result
-
-
-# Print out result
 ```
 
 *** =solution
@@ -105,29 +96,29 @@ savings = 100
 
 # Create a variable factor
 factor = 1.1
-
-# Calculate result
-result = savings * factor ** 7
-
-# Print out result
-print(result)
 ```
 
 *** =sct
 ```{python}
-test_object("savings", undefined_msg = "The variable `savings` was defined for you, don't remove it!",
-                       incorrect_msg = "The variable `savings` should be `100`, like it was defined for you.")
-test_object("factor", incorrect_msg = "The value of `factor` should be `1.1`.")
-test_object("result", incorrect_msg = "Have you used `*` and `**` to calculate `result`?")
-msg = "Don't forget to print out `result` after assigning it."
-test_print(not_called_msg = msg, incorrect_msg = msg)
-success_msg("Great!")
+# in case the student deletes the code for savings, this will tell them.
+Ex().test_object("savings")
+
+# this SCT will check that factor exists, and that the value of factor in
+# the student and submission code are equal (i.e. compares with == operator). 
+# see previous exercise for details on test_object.
+Ex().test_object("factor")
+
+# we can be more explicit that factor should be a float, using is_instance.
+# unlike test_object above, the SCT below will ask if factor is a float.
+# NOTE: comment out code above to see this SCT in action
+Ex().check_object("factor").is_instance(float).has_equal_value()
+
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:e2cb3a665e
 ## strings and booleans
 
-In the previous exercise, you worked with two Python data types:
+In the previous exercises, you worked with two Python data types:
 
 - `int`, or integer: a number without a fractional part. `savings`, with the value `100`, is an example of an integer.
 - `float`, or floating point: a number that has both an integer and fractional part, separated by a point. `factor`, with the value `1.10`, is an example of a float.
@@ -136,6 +127,8 @@ Next to numerical data types, there are two other very common data types:
 
 - `str`, or string: a type to represent text. You can use single or double quotes to build a string.
 - `bool`, or boolean: a type to represent logical values. Can only be `True` or `False`.
+
+These types may be tested in the same way as `int` and `float`.
 
 *** =instructions
 - Create a new string, `desc`, with the value `"compound interest"`.
@@ -170,10 +163,17 @@ profitable = True
 
 *** =sct
 ```{python}
-test_object("desc", incorrect_msg = "Assign the value `\"compound interest\"` to the variable `desc`.")
-test_object("profitable", incorrect_msg = "Assign the value `True` to the variable `profitable`.")
+Ex().test_object("desc", incorrect_msg = 'Assign the value `"compound interest"` to the variable `desc`.')
+Ex().test_object("profitable", incorrect_msg = 'Assign the value `True` to the variable `profitable`.')
 
-success_msg("Nice!")
+# Why do the SCTs above pass when setting "profitable = 1"? -------------------------------------------------------
+
+# If you only used the code above, then setting "profitable = 1" would also pass,
+# since 1 == True. If you were a stickler about profitable being a bool instance,
+# you could use the more fine-grained check functions, as shown below.
+Ex().check_object("desc").is_instance(bool, "is_instance figured out that it is not a string").has_equal_value()
+Ex().check_object("profitable").is_instance(bool, "is_instance figured out that it is not a bool").has_equal_value()
+
 ```
 
 
@@ -188,15 +188,15 @@ b = "nice"
 my_list = ["my", "list", a, b]
 ```
 
+**Below is a potential scenario for teaching students to use a list.**
+
 After measuring the height of your family, you decide to collect some information on the house you're living in. The areas of the different parts of your house are stored in separate variables for now, as shown in the script.
 
 *** =instructions
 - Create a list, `areas`, that contains the area of the hallway (`hall`), kitchen (`kit`), living room (`liv`), bedroom (`bed`) and bathroom (`bath`), in this order. Use the predefined variables.
-- Print `areas` with the [`print()`](https://docs.python.org/3/library/functions.html#print) function.
 
 *** =hint
 - You can use the variables that have already been created to build the list: `areas = [hall, kit, ...]`.
-- Put `print(areas)` in your script to print out the list when submitting.
 
 *** =pre_exercise_code
 ```{python}
@@ -214,10 +214,6 @@ bath = 9.50
 
 # Create list areas
 
-
-# Print areas
-
-
 ```
 
 *** =solution
@@ -231,28 +227,44 @@ bath = 9.50
 
 # Create list areas
 areas = [hall, kit, liv, bed, bath]
-
-# Print areas
-print(areas)
 ```
 
 *** =sct
 ```{python}
+# This test makes sure that students are warned if they delete parts of the sample code.
+# Note that
+#
+#     Ex().test_object("hall")
+#     Ex().test_object("kit")
+#
+# Is equivalent to
+#
+#     Ex().multi(test_object("hall"), test_object("kit"))
+#
+# MC-NOTE: should I remove multi change these to all using Ex().test1; Ex().test2; ...?
 msg = "Don't remove or edit the predefined variables!"
-test_object("hall", undefined_msg = msg, incorrect_msg = msg)
-test_object("kit", undefined_msg = msg, incorrect_msg = msg)
-test_object("liv", undefined_msg = msg, incorrect_msg = msg)
-test_object("bed", undefined_msg = msg, incorrect_msg = msg)
-test_object("bath", undefined_msg = msg, incorrect_msg = msg)
+Ex().multi(
+        test_object("hall", undefined_msg = msg, incorrect_msg = msg),
+        test_object("kit", undefined_msg = msg, incorrect_msg = msg),
+        test_object("liv", undefined_msg = msg, incorrect_msg = msg),
+        test_object("bed", undefined_msg = msg, incorrect_msg = msg),
+        test_object("bath", undefined_msg = msg, incorrect_msg = msg)
+        )
 
-test_object("areas", incorrect_msg = "Define `areas` as the list containing all the area variables, in the correct order: `hall`, `kit`, `liv`, `bed` and `bath`. Watch out for typos. The list doesn't have to contain anything else.")
+# This code checks that the variable "areas" was defined, and is the correct value
+Ex().test_object("areas", incorrect_msg = "Define `areas` as the list containing all the area variables, in the correct order: `hall`, `kit`, `liv`, `bed` and `bath`. Watch out for typos. The list doesn't have to contain anything else.")
 
-test_function("print", incorrect_msg = "Print out the `areas` list you created by using `print(areas)`.")
-
-success_msg("Nice! A list is way better here, isn't it?")
+# Note: Try making the submission code equal to the solution code, and then
+#       change "kit = 18.0" in the submission to "kit = 18". Why does the submission pass?
+#       The answer is that pythonwhat uses "==" to test that a variable has the same value
+#       between the student and solution results. In python the following evaluate to True
+#           [1, 2, 3] == [1.0, 2, 3]
+#           [1, 2, 3] == [True, 2, 3]
+#
+# If you wanted to be very specific, you could use one of the following tests.
+# Option 1: see if string output is the same. This is similar to comparing str('areas').
+Ex().check_object('areas').is_instance(list).has_equal_output()
 ```
-
-
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:7f08642d18
