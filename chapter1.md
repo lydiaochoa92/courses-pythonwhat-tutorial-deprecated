@@ -331,14 +331,14 @@ upstairs = areas[6:10]
 ```{python}
 # This test makes sure that students are warned if they delete parts of the sample code.
 msg = "Don't remove or edit the predefined `areas` list."
-test_object("areas", undefined_msg = msg, incorrect_msg = msg)
+Ex().test_object("areas", undefined_msg = msg, incorrect_msg = msg)
 
 # Since each slice is assigned to a variable, we can test those variables with test_object
 # test variable downstairs
-test_object("downstairs", incorrect_msg = "Your definition of `downstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `0:6` where the dots are, for example.")
+Ex().test_object("downstairs", incorrect_msg = "Your definition of `downstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `0:6` where the dots are, for example.")
 
 # test variable upstairs
-test_object("upstairs", incorrect_msg = "Your definition of `upstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `6:10` where the dots are, for example.")
+Ex().test_object("upstairs", incorrect_msg = "Your definition of `upstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `6:10` where the dots are, for example.")
 
 # Alternatively, we could be more specific and make sure they typed "areas[0:6]" somewhere in their code, with
 #
