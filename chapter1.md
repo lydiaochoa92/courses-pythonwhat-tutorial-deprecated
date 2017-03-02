@@ -262,8 +262,9 @@ Ex().test_object("areas", incorrect_msg = "Define `areas` as the list containing
 #           [1, 2, 3] == [True, 2, 3]
 #
 # If you wanted to be very specific, you could use one of the following tests, which
-# is similar to comparing str('areas').
-Ex().check_object('areas').is_instance(list).has_equal_output()
+# is similar to comparing str('areas') across student and solution results.
+# for more on has_equal_value, see: http://pythonwhat.readthedocs.io/en/latest/expression_tests.html#expressions
+Ex().check_object('areas').is_instance(list).has_equal_value(expr_code="str(areas)")
 ```
 
 
