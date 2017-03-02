@@ -171,7 +171,7 @@ Ex().test_object("profitable", incorrect_msg = 'Assign the value `True` to the v
 # If you only used the code above, then setting "profitable = 1" would also pass,
 # since 1 == True. If you were a stickler about profitable being a bool instance,
 # you could use the more fine-grained check functions, as shown below.
-Ex().check_object("desc").is_instance(bool, "is_instance figured out that it is not a string").has_equal_value()
+Ex().check_object("desc").is_instance(str, "is_instance figured out that it is not a string").has_equal_value()
 Ex().check_object("profitable").is_instance(bool, "is_instance figured out that it is not a bool").has_equal_value()
 
 ```
