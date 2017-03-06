@@ -9,33 +9,30 @@ attachments :
 
 ## int
 
-In Python, a variable allows you to refer to a value with a name. To create a variable use `=`, like this example:
+[see test_object docs](http://pythonwhat.readthedocs.io/en/latest/simple_tests/test_object.html)
 
-```
-x = 5
-```
+It is very common for submission correctness tests (SCTs) to check the following:
 
-You can now use the name of this variable, `x`, instead of the actual value, `5`.
+1. that someone defined a variable (e.g. `savings = 100`)
+2. that the variable has the correct value
+
+This is where `test_object` comes in.
+If you need more fine grained control, use the functions `check_object`, `is_instance`, and `has_equal_value`.
+
 
 *** =instructions
 - Create a variable `savings` with the value 100.
-- Check out this variable by typing `print(savings)` in the script.
 
 *** =hint
 - Type `savings = 100` to create the variable `savings`.
-- After creating the variable `savings`, you can type `print(savings)`.
 
 *** =pre_exercise_code
 ```{python}
-# pec
 ```
 
 *** =sample_code
 ```{python}
 # Create a variable savings
-
-
-# Print out savings
 
 ```
 
@@ -43,41 +40,40 @@ You can now use the name of this variable, `x`, instead of the actual value, `5`
 ```{python}
 # Create a variable savings
 savings = 100
-
-# Print out savings
-print(savings)
 ```
 
 *** =sct
 ```{python}
-test_object("savings", incorrect_msg = "Assign `100` to the variable `savings`.")
+# test that savings is defined, and that its value matches the solution
+# note: the variable 'savings' is checked in the submission and solution code
+#       AFTER running all solution and submission code.
+Ex().test_object("savings", 
+                 incorrect_msg = "Assign `100` to the variable `savings`.",
+                 undefined_msg = "Did you define the variable `savings`?")
 
-# MC-Note: Can remove test_function below and mentions of print, since this is first ex in tutorial
-test_function("print", incorrect_msg = "Print out `savings`, the variable you created, using `print(savings)`.")
-success_msg("Great! Let's try to do some calculations with this variable now!")
+# if we only included the above test, it would allow "savings = 100.0", which is a float :(.
+# in order to be very particular, and select only an integer, you can use the more fine-grained
+# check functions
+# NOTE: comment out test_object above to see each piece in action.
+Ex().check_object("savings", missing_msg = "Did you define the variable savings?") \
+    .is_instance(int, "Is it an integer?") \
+    .has_equal_value("Assign it the value `100`")
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:c7bbacb2a2
 
 ## float
 
-Remember how you calculated the money you ended up with after 7 years of investing $100? You did something like this:
+In the previous exercise we tested that a variable, `savings` was defined as the integer `100`.
 
-```
-100 * 1.10 ** 7
-```
+Here, we use the same SCTs to test the case where a new variable `factor` it should be the `float` `1.10`.
 
-Instead of calculating with the actual values, you can use variables instead. The `savings` variable you've created in the previous exercise represents the $100 you started with. It's up to you to create a new variable to represent `1.10` and then redo the calculations!
 
 *** =instructions
-- Create a variable `factor`, equal to `1.10`.
-- Use `savings` and `factor` to calculate the amount of money you end up with after 7 years. Store the result in a new variable, `result`.
-- Print out the value of `result`.
+- Create a variable `savings`, equal to `1.10`.
 
 *** =hint
-- To create the variable `factor`, use `factor = 1.10`.
-- In the example code block of the assignment, replace `100` with `savings` and `1.10` with `factor`: `savings * factor ** 7`.
-- Use the [`print()`](https://docs.python.org/3/library/functions.html#print) function to print the value of a variable.
+- To create the variable `savings`, use `savings = 1.10`.
 
 *** =pre_exercise_code
 ```{python}
@@ -91,11 +87,6 @@ savings = 100
 
 # Create a variable factor
 
-
-# Calculate result
-
-
-# Print out result
 ```
 
 *** =solution
@@ -105,29 +96,29 @@ savings = 100
 
 # Create a variable factor
 factor = 1.1
-
-# Calculate result
-result = savings * factor ** 7
-
-# Print out result
-print(result)
 ```
 
 *** =sct
 ```{python}
-test_object("savings", undefined_msg = "The variable `savings` was defined for you, don't remove it!",
-                       incorrect_msg = "The variable `savings` should be `100`, like it was defined for you.")
-test_object("factor", incorrect_msg = "The value of `factor` should be `1.1`.")
-test_object("result", incorrect_msg = "Have you used `*` and `**` to calculate `result`?")
-msg = "Don't forget to print out `result` after assigning it."
-test_print(not_called_msg = msg, incorrect_msg = msg)
-success_msg("Great!")
+# in case the student deletes the code for savings, this will tell them.
+Ex().test_object("savings")
+
+# this SCT will check that factor exists, and that the value of factor in
+# the student and submission code are equal (i.e. compares with == operator). 
+# see previous exercise for details on test_object.
+Ex().test_object("factor")
+
+# we can be more explicit that factor should be a float, using is_instance.
+# unlike test_object above, the SCT below will ask if factor is a float.
+# NOTE: comment out code above to see this SCT in action
+Ex().check_object("factor").is_instance(float).has_equal_value()
+
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:e2cb3a665e
 ## strings and booleans
 
-In the previous exercise, you worked with two Python data types:
+In the previous exercises, you worked with two Python data types:
 
 - `int`, or integer: a number without a fractional part. `savings`, with the value `100`, is an example of an integer.
 - `float`, or floating point: a number that has both an integer and fractional part, separated by a point. `factor`, with the value `1.10`, is an example of a float.
@@ -136,6 +127,8 @@ Next to numerical data types, there are two other very common data types:
 
 - `str`, or string: a type to represent text. You can use single or double quotes to build a string.
 - `bool`, or boolean: a type to represent logical values. Can only be `True` or `False`.
+
+These types may be tested in the same way as `int` and `float`.
 
 *** =instructions
 - Create a new string, `desc`, with the value `"compound interest"`.
@@ -170,10 +163,17 @@ profitable = True
 
 *** =sct
 ```{python}
-test_object("desc", incorrect_msg = "Assign the value `\"compound interest\"` to the variable `desc`.")
-test_object("profitable", incorrect_msg = "Assign the value `True` to the variable `profitable`.")
+Ex().test_object("desc", incorrect_msg = 'Assign the value `"compound interest"` to the variable `desc`.')
+Ex().test_object("profitable", incorrect_msg = 'Assign the value `True` to the variable `profitable`.')
 
-success_msg("Nice!")
+# Why do the SCTs above pass when setting "profitable = 1"? -------------------------------------------------------
+
+# If you only used the code above, then setting "profitable = 1" would also pass,
+# since 1 == True. If you were a stickler about profitable being a bool instance,
+# you could use the more fine-grained check functions, as shown below.
+Ex().check_object("desc").is_instance(str, "is_instance figured out that it is not a string").has_equal_value()
+Ex().check_object("profitable").is_instance(bool, "is_instance figured out that it is not a bool").has_equal_value()
+
 ```
 
 
@@ -188,15 +188,15 @@ b = "nice"
 my_list = ["my", "list", a, b]
 ```
 
+**Below is a potential scenario for teaching students to use a list.**
+
 After measuring the height of your family, you decide to collect some information on the house you're living in. The areas of the different parts of your house are stored in separate variables for now, as shown in the script.
 
 *** =instructions
 - Create a list, `areas`, that contains the area of the hallway (`hall`), kitchen (`kit`), living room (`liv`), bedroom (`bed`) and bathroom (`bath`), in this order. Use the predefined variables.
-- Print `areas` with the [`print()`](https://docs.python.org/3/library/functions.html#print) function.
 
 *** =hint
 - You can use the variables that have already been created to build the list: `areas = [hall, kit, ...]`.
-- Put `print(areas)` in your script to print out the list when submitting.
 
 *** =pre_exercise_code
 ```{python}
@@ -214,10 +214,6 @@ bath = 9.50
 
 # Create list areas
 
-
-# Print areas
-
-
 ```
 
 *** =solution
@@ -231,40 +227,59 @@ bath = 9.50
 
 # Create list areas
 areas = [hall, kit, liv, bed, bath]
-
-# Print areas
-print(areas)
 ```
 
 *** =sct
 ```{python}
+# This test makes sure that students are warned if they delete parts of the sample code.
+# Note that
+#
+#     Ex().test_object("hall")
+#     Ex().test_object("kit")
+#
+# Is equivalent to
+#
+#     Ex().multi(test_object("hall"), test_object("kit"))
+#
+# MC-NOTE: should I remove multi change these to all using Ex().test1; Ex().test2; ...?
 msg = "Don't remove or edit the predefined variables!"
-test_object("hall", undefined_msg = msg, incorrect_msg = msg)
-test_object("kit", undefined_msg = msg, incorrect_msg = msg)
-test_object("liv", undefined_msg = msg, incorrect_msg = msg)
-test_object("bed", undefined_msg = msg, incorrect_msg = msg)
-test_object("bath", undefined_msg = msg, incorrect_msg = msg)
+Ex().multi(
+        test_object("hall", undefined_msg = msg, incorrect_msg = msg),
+        test_object("kit", undefined_msg = msg, incorrect_msg = msg),
+        test_object("liv", undefined_msg = msg, incorrect_msg = msg),
+        test_object("bed", undefined_msg = msg, incorrect_msg = msg),
+        test_object("bath", undefined_msg = msg, incorrect_msg = msg)
+        )
 
-test_object("areas", incorrect_msg = "Define `areas` as the list containing all the area variables, in the correct order: `hall`, `kit`, `liv`, `bed` and `bath`. Watch out for typos. The list doesn't have to contain anything else.")
+# This code checks that the variable "areas" was defined, and is the correct value
+Ex().test_object("areas", incorrect_msg = "Define `areas` as the list containing all the area variables, in the correct order: `hall`, `kit`, `liv`, `bed` and `bath`. Watch out for typos. The list doesn't have to contain anything else.")
 
-test_function("print", incorrect_msg = "Print out the `areas` list you created by using `print(areas)`.")
-
-success_msg("Nice! A list is way better here, isn't it?")
+# Note: Try making the submission code equal to the solution code, and then
+#       change "kit = 18.0" in the submission to "kit = 18". Why does the submission pass?
+#       The answer is that pythonwhat uses "==" to test that a variable has the same value
+#       between the student and solution results. In python the following evaluate to True
+#           [1, 2, 3] == [1.0, 2, 3]
+#           [1, 2, 3] == [True, 2, 3]
+#
+# If you wanted to be very specific, you could use one of the following tests, which
+# is similar to comparing str('areas') across student and solution results.
+# for more on has_equal_value, see: http://pythonwhat.readthedocs.io/en/latest/expression_tests.html#expressions
+Ex().check_object('areas').is_instance(list).has_equal_value(expr_code="str(areas)")
 ```
-
-
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:7f08642d18
 ## list slicing
 
-Selecting single values from a list is just one part of the story. It's also possible to _slice_ your list, which means selecting multiple elements from your list. Use the following syntax:
+Checking a list is just one part of the story. It's also possible to _slice_ your list, which means selecting multiple elements from your list--using the following syntax:
 
 ```
 my_list[start:end]
 ```
 
 The `start` index will be included, while the `end` index is _not_.
+
+**Below is a potential scenario for teaching students to slice a list.**
 
 The code sample below shows an example. A list with `"b"` and `"c"`, corresponding to indexes 1 and 2, are selected from a list `x`:
 
@@ -278,12 +293,10 @@ The elements with index 1 and 2 are included, while the element with index 3 is 
 *** =instructions
 - Use slicing to create a list, `downstairs`, that contains the first 6 elements of `areas`.
 - Do a similar thing to create a new variable, `upstairs`, that contains the last 4 elements of `areas`.
-- Print both `downstairs` and `upstairs` using [`print()`](https://docs.python.org/3/library/functions.html#print).
 
 *** =hint
 - Use the brackets `[0:6]` to build `downstairs`.
-- Use the barckets `[6:10]` to build `upstairs`.
-- Simply add two [`print()`](https://docs.python.org/3/library/functions.html#print) calls to the script to print out `downstairs` and `upstairs`.
+- Use the brackets `[6:10]` to build `upstairs`.
 
 *** =pre_exercise_code
 ```{python}
@@ -300,8 +313,6 @@ areas = ["hallway", 11.25, "kitchen", 18.0, "living room", 20.0, "bedroom", 10.7
 
 # Use slicing to create upstairs
 
-
-# Print out downstairs and upstairs
 ```
 
 *** =solution
@@ -315,31 +326,37 @@ downstairs = areas[0:6]
 # Use slicing to create upstairs
 upstairs = areas[6:10]
 
-# Print out downstairs and upstairs
-print(downstairs)
-print(upstairs)
 ```
 
 *** =sct
 ```{python}
+# This test makes sure that students are warned if they delete parts of the sample code.
 msg = "Don't remove or edit the predefined `areas` list."
-test_object("areas", undefined_msg = msg, incorrect_msg = msg)
+Ex().test_object("areas", undefined_msg = msg, incorrect_msg = msg)
 
-test_object("downstairs", incorrect_msg = "Your definition of `downstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `0:6` where the dots are, for example.")
-test_object("upstairs", incorrect_msg = "Your definition of `upstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `6:10` where the dots are, for example.")
+# Since each slice is assigned to a variable, we can test those variables with test_object
+# test variable downstairs
+Ex().test_object("downstairs", incorrect_msg = "Your definition of `downstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `0:6` where the dots are, for example.")
 
-test_function("print", 1, incorrect_msg = "First, print out `downstairs` using `print(downstairs)`.")
-test_function("print", 2, incorrect_msg = "First, print out `upstairs` using `print(upstairs)`.")
+# test variable upstairs
+Ex().test_object("upstairs", incorrect_msg = "Your definition of `upstairs` is incorrect. Use `areas[...]` and slicing to select the elements you want. You could use `6:10` where the dots are, for example.")
 
-success_msg("Great!")
+# Alternatively, we could be more specific and make sure they typed "areas[0:6]" somewhere in their code, with
+#
+#     Ex().test_student_typed("areas[0:6]", not_typed_msg = "did you slice areas, using `areas[0:6]`?")
+#
+# However, this would fail valid solutions like "downstairs = areas[0 : 6]". In order
+# to test that they sliced areas more flexibly, you can use regular expressions.
+# see https://docs.python.org/3/library/re.html
+Ex().test_student_typed(r"areas\[\s*0\s*:\s*6\s*]", 
+                        pattern = True,
+                        not_typed_msg = "did you slice areas, using `areas[0:6]`?")
 ```
-
-
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:b67a5ea0d3
 ## dictionary
 
-The `countries` and `capitals` lists are again available in the script. It's your job to convert this data to a dictionary where the country names are the keys and the capitals are the corresponding values. As a refresher, here is a recipe for creating a dictionary:
+Another common type is a dictionary. As a refresher, here is a recipe for creating a dictionary:
 
 ```
 my_dict = {
@@ -348,15 +365,15 @@ my_dict = {
 }
 ```
 
-In this recipe, both the keys and the values are strings. This will also be the case for this exercise.
+In this recipe, both the keys and the values are strings. This will also be the case for the example exercise.
 
 *** =instructions
 - With the strings in `countries` and `capitals`, create a dictionary called `europe` with 4 key:value pairs. Beware of capitalization! Make sure you use lowercase characters everywhere.
-- Print out `europe` to see if the result is what you expected.
+
 
 *** =hint
 - Start with `{ "spain":"madrid", ... }`. Include three more key:value pairs in a similar fashion.
-- Don't forget to use quotation marks for strings!
+
 
 *** =sample_code
 ```{python}
@@ -365,9 +382,6 @@ countries = ['spain', 'france', 'germany', 'norway']
 capitals = ['madrid', 'paris', 'berlin', 'oslo']
 
 # From string in countries and capitals, create dictionary europe
-
-
-# Print europe
 
 ```
 
@@ -379,28 +393,34 @@ capitals = ['madrid', 'paris', 'berlin', 'oslo']
 
 # From string in countries and capitals, create dictionary europe
 europe = {'spain':'madrid', 'france':'paris', 'germany':'berlin', 'norway':'oslo' }
-
-# Print europe
-print(europe)
 ```
 
 *** =sct
 ```{python}
 
-msg = "Did you correctly create the dictionary `europe`?"
-test_object("europe", undefined_msg = msg, incorrect_msg = msg)
+undef_msg = "Did you define the variable `europe`?"
+incorrect_msg = "Did you set `europe` to the correct dictionary?"
+Ex().test_object("europe", undefined_msg = undef_msg, incorrect_msg = incorrect_msg)
 
-msg = "Have you correctly printed out `europe`?"
-test_function("print", 1, not_called_msg = msg, incorrect_msg = msg)
+# Alternatively, could use more fine-grained checks -------------------------------------
 
-success_msg("Great! Now that you've built your first dictionaries, let's get serious!")
+# Example 1: check that an individual key exists
+Ex().check_object("europe").has_key("spain", key_missing_msg = "Missing key spain")
+
+# Example 2: check a key's value
+Ex().check_object("europe").has_equal_key("france", 
+                                          incorrect_value_msg = "Incorrect value",
+                                          key_missing_msg = "Missing key france")
+
+# Example 3: check that europe is a dict, and that it's value is equal between student and solution results
+Ex().check_object("europe", undef_msg).is_instance(dict).has_equal_value(incorrect_msg)
 ```
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:6048cbed18
 ## dictionary item
 
-If the keys of a dictionary are chosen wisely, accessing the values in a dictionary is easy and intuitive. For example, to get the capital for France from `europe` you can use:
+The previous exercise considered testing a dictionary, including whether individual items in a dictionary were correct. However, sometimes you want to test that students performed the **selection** of a dictionary item. For example, using the dictionary from the previous exercise:
 
 ```
 europe['france']
@@ -408,9 +428,10 @@ europe['france']
 
 Here, `'france'` is the key and `'paris'` the value is returned.
 
+**Below is a potential scenario for teaching students to print the keys, and an item of a dictionary.**
+
 *** =instructions
 - Check out which keys are in `europe` by calling the [`keys()`](https://docs.python.org/3/library/stdtypes.html#dict.keys) method on `europe`. Print out the result.
-- Print out the value that belongs to the key `'norway'`.
 
 *** =hint
 - `europe.keys()` gives you the keys in `europe`. Make sure to wrap a [`print()`](https://docs.python.org/3/library/functions.html#print) call around it.
@@ -442,38 +463,50 @@ print(europe['norway'])
 
 *** =sct
 ```{python}
-test_function("europe.keys")
+# check that students called europe.keys() at least once
+# Note: we set signature=False below, othewise pythonwhat will try to read the function signature
+#       of europe.keys, see http://pythonwhat.readthedocs.io/en/latest/part_checks.html#matching-signatures
+Ex().check_function("europe.keys", 0, signature=False, missing_msg = "did you get the keys of europe using `europe.keys()`")
 
+# check first occurence of print function, make sure it was given the right code
 msg = "For the first printout, use `print(europe.keys())` to print out all keys of `europe`."
-test_function("print", 1, not_called_msg = msg, incorrect_msg = msg)
+(Ex().check_function("print", 0, missing_msg = msg)      # get code for first print call
+     .check_args(0)                                      # get code for first positional argument
+     .has_equal_ast(incorrect_msg = "Did you call `europe.keys()`?")   # do student and solution have same abstract syntax?
+     )
+
+# Note: could replace has_equal_ast with has_equal_value above, which will re-execute the code for the first
+#       positional argument, and see if the string outputs match between student and solution. This is shown
+#       below for the second print statement
 
 msg = "For the second printout, use `print(europe['norway'])` to print out the value belonging to the key `'norway'`."
-test_function("print", 2, not_called_msg = msg, incorrect_msg = msg)
+(Ex().check_function("print", 1, missing_msg = msg)      # get code for second print call
+     .check_args(0)                                      # get code for second positional argument
+     .has_equal_value(incorrect_msg = "Did you call `europe['norway']`?")   # do student and solution have same value using ==?
+     )
 
-success_msg("Good job, now you're warmed up for some more.")
 ```
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:84cab9d170
 ## numpy array
 
-In this chapter, we're going to dive into the world of baseball. Along the way, you'll get comfortable with the basics of Numpy, a powerful package to do data science.
+In this exercise we'll consider how to test arrays from Numpy, a powerful package to do data science.
+
+**Below is a potential scenario for teaching students to use numpy arrays.**
 
 A list `baseball` has already been defined in the Python script, representing the height of some baseball players in centimeters. Can you add some code here and there to create a Numpy array from it?
 
 *** =instructions
-- Import the `numpy` package as `np`, so that you can refer to `numpy` with `np`.
 - Use [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array) to create a Numpy array from `baseball`. Name this array `np_baseball`.
 - Print out the type of `np_baseball` to check that you got it right.
 
 *** =hint
 - `import numpy as np` will do the trick. Now, you have to use `np.fun_name()` whenever you want to use a Numpy function.
 - [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array) should take on input `baseball`. Assign the result of the function call to `np_baseball`.
-- To print out the type of a variable `x`, simply type `print(type(x))`.
 
 *** =pre_exercise_code
 ```{python}
-import numpy as np
 ```
 
 *** =sample_code
@@ -482,12 +515,9 @@ import numpy as np
 baseball = [180, 215, 210, 210, 188, 176, 209, 200]
 
 # Import the numpy package as np
-
+import numpy as np
 
 # Create a Numpy array from baseball: np_baseball
-
-
-# Print out type of np_baseball
 
 ```
 
@@ -501,35 +531,25 @@ import numpy as np
 
 # Create a Numpy array from baseball: np_baseball
 np_baseball = np.array(baseball)
-
-# Print out type of np_baseball
-print(type(np_baseball))
 ```
 
 *** =sct
 ```{python}
-msg = "You don't have to change or remove the predefined variables."
-test_object("baseball", undefined_msg = msg, incorrect_msg = msg)
+array_missing_msg = "Be sure to call [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array)."
 
-test_import("numpy")
-
-test_object("np_baseball", do_eval = False)
-test_function("numpy.array", not_called_msg = "Be sure to call [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array).",
-                             incorrect_msg = "You should call [`np.array()`](http://docs.scipy.org/doc/numpy-1.10.0/glossary.html#term-array) as follows: `np.array(baseball)`.")
-test_object("np_baseball", incorrect_msg = "Assign the correct value to `np_baseball`.")
-
-msg = "Make sure to print out the type of `np_baseball` like this: `print(type(np_baseball))`."
-test_function("type", 1, incorrect_msg = msg)
-test_function("print", 1, incorrect_msg = msg)
-
-success_msg("Great job!")
+# Test that np_baseball exists, save the chain as obj, to run further tests on later
+obj = Ex().check_object("np_baseball")
+# Test that numpy.array function was called at least once
+Ex().check_function('numpy.array', 0, missing_msg = array_missing_msg)
+# Test that the value of np_baseball matches between solution and student results
+obj.has_equal_value(incorrect_msg = "Incorrect value.")
 ```
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:fcb2a9007b
 ## numpy array slice
 
-You've seen it with your own eyes: Python lists and Numpy arrays sometimes behave differently. Luckily, there are still certainties in this world. For example, subsetting (using the square bracket notation on lists or arrays) works exactly the same. To see this for yourself, try the following lines of code in the IPython Shell:
+As with lists and dictionaries, you may sometimes want to ensure that someone has subset, or sliced a numpy array. For example:
 
 ```
 x = ["a", "b", "c"]
@@ -538,6 +558,10 @@ x[1]
 np_x = np.array(x)
 np_x[1]
 ```
+
+Thus, slicing a numpy array is similar to both lists and dictionaries, and in fact is indistinguishable based on the code alone (under the hood, everything in python is an object, and all slicing uses the special object method [\_\_getitem\_\_](https://docs.python.org/3/reference/datamodel.html#object.__getitem__)).
+
+**Below is a potential scenario for teaching students to use numpy arrays.**
 
 The script on the right already contains code that imports `numpy` as `np`, and stores both the height and weight of the MLB players as Numpy arrays.
 
@@ -597,30 +621,20 @@ print(np_height[100:111])
 *** =sct
 ```{python}
 
-test_import("numpy", same_as = False)
-
-msg = "You don't have to change or remove the predefined variables."
-test_object("np_height", undefined_msg = msg, incorrect_msg = msg)
-test_object("np_weight", undefined_msg = msg, incorrect_msg = msg)
-
-test_function("print", 1,
-              incorrect_msg = "For the first printout, subset `np_weight` to select the 50th element.")
-
-test_function("print", 2,
-              incorrect_msg = "For the second printout, subset `np_height` to select the 100th to 110th element, included. You can use the slicing operator: `:`, just make sure to put in the correct ending index.")
-
-success_msg("Nice! Time to learn something new: 2D Numpy arrays!")
+# See the exercise for testing list slicing in this chapter for details and further tests
+Ex().check_function('print', 0).check_args(0).has_equal_value()
+Ex().check_function('print', 1).check_args(0).has_equal_value()
 ```
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:532155cd37
 ## pandas data frame
 
-Pandas is an open source library, providing high-performance, easy-to-use data structures and data analysis tools for Python. Sounds promising!
+Pandas is an open source library, providing high-performance, easy-to-use data structures and data analysis tools for Python. 
 
 The DataFrame is one of Pandas' most important data structures. It's basically a way to store tabular data, where you can label the rows and the columns. One way to build a DataFrame is from a dictionary.
 
-In the exercises that follow you will be working with vehicle data in different countries. Each observation corresponds to a country and the columns give information about the number of vehicles per capita, whether people drive left or right, and so on.
+The exercises that follow has students work with vehicle data in different countries. Each observation corresponds to a country and the columns give information about the number of vehicles per capita, whether people drive left or right, and so on.
 
 Three lists are defined in the script:
 - `names`, containing the country names for which data is available.
@@ -630,17 +644,10 @@ Three lists are defined in the script:
 Each dictionary key is a column label and each value is a list which contains the column elements.
 
 *** =instructions
-- Import `pandas` as `pd`.
-- Use the pre-defined lists to create dictionary, called `my_dict`. There should be three key value pairs:
-  + key `'country'` and value `names`.
-  + key `'drives_right'` and value `dr`.
-  + key `'cars_per_cap'` and value `cpc`.
 - Use [`pd.DataFrame()`](http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html) to turn your dict into a DataFrame called `cars`.
 - Print out `cars` and see how beautiful it is.
 
 *** =hint
-- `import pandas as pd` imports `pandas` under the local name `pd`.
-- A dictionary with only the country names would look like this: `my_dict = { 'country':names }`. Can you add some more key:value pairs?
 - `pd.DataFrame(my_dict)` will produce a DataFrame that you can store as `cars`.
 - To print out a variable `x` type `print(x)` on a new line in your script.
 
@@ -651,14 +658,11 @@ names = ['United States', 'Australia', 'Japan', 'India', 'Russia', 'Morocco', 'E
 dr =  [True, False, False, False, True, True, True]
 cpc = [809, 731, 588, 18, 200, 70, 45]
 
-# Import pandas as pd
-
-
 # Create dictionary my_dict with three key:value pairs: my_dict
-
+my_dict = { 'country':names, 'drives_right':dr, 'cars_per_cap':cpc }
 
 # Build a DataFrame cars from my_dict: cars
-
+import pandas as pd
 
 # Print cars
 
@@ -671,13 +675,11 @@ names = ['United States', 'Australia', 'Japan', 'India', 'Russia', 'Morocco', 'E
 dr =  [True, False, False, False, True, True, True]
 cpc = [809, 731, 588, 18, 200, 70, 45]
 
-# Import pandas as pd
-import pandas as pd
-
 # Create dictionary my_dict with three key:value pairs: my_dict
 my_dict = { 'country':names, 'drives_right':dr, 'cars_per_cap':cpc }
 
 # Build a DataFrame cars from my_dict: cars
+import pandas as pd
 cars = pd.DataFrame(my_dict)
 
 # Print cars
@@ -686,26 +688,19 @@ print(cars)
 
 *** =sct
 ```{python}
-msg = "You don't have to change or remove `names`, it was defined for you."
-test_object("names", undefined_msg = msg, incorrect_msg = msg)
-
-msg = "You don't have to change or remove `dr`, it was defined for you."
-test_object("dr", undefined_msg = msg, incorrect_msg = msg)
-
-msg = "You don't have to change or remove `cpc`, it was defined for you."
-test_object("cpc", undefined_msg = msg, incorrect_msg = msg)
-
-msg = "Have you correctly imported `pandas` as `pd`? Use `import pandas as pd`."
-test_import("pandas", not_imported_msg = msg, incorrect_as_msg = msg)
-
-msg = "You can create a dictionary as follows: `{'country': names, 'drives_right': dr, 'cars_per_cap':cpc}`. Make sure to assign it to `my_dict`."
-test_object("my_dict", undefined_msg = msg, incorrect_msg = msg)
-
+# First, you can test a DataFrame using test_object. However, we show the function test_data_frame here.
+# We illustrate using test_data_frame to test only one column, drives_right, and then check_object to show
+# how you can do a similar test using the other two columns.
 msg = "You can create a pandas DataFrame as follows: `pd.DataFrame(my_dict)`. Make sure to store it as `cars`."
-test_object("cars", undefined_msg = msg, incorrect_msg = msg)
+Ex().test_data_frame("cars", 
+                     columns = ['drives_right'],
+                     undefined_msg = msg, not_data_frame_msg = msg,
+                     incorrect_msg = msg)
 
-msg = "Don't forget to print out the `cars` DataFrame with [`print()`](https://docs.python.org/3/library/functions.html#print)."
-test_function("print",  not_called_msg = msg, incorrect_msg = msg)
+# Alternatively, can use more generic check functions
+Ex().check_object("cars").has_equal_key("country").has_equal_key("cars_per_cap")
 
-success_msg("Good job! Notice that the columns of `cars` can be of different types. This was not possible with 2D Numpy arrays!")
+# Finally, check that it was used inside the print function
+#msg = "Don't forget to print out the `cars` DataFrame with [`print()`](https://docs.python.org/3/library/functions.html#print)."
+Ex().check_function("print", 0).check_args(0).has_equal_value()
 ```
