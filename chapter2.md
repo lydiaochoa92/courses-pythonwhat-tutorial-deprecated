@@ -5,7 +5,9 @@ description : Insert the chapter description here
 --- type:NormalExercise lang:python xp:100 skills:2 key:c422ee929b
 ## function calls
 
-Out of the box, Python offers a bunch of built-in functions to make your life as a data scientist easier. You already know two such functions: [`print()`](https://docs.python.org/3/library/functions.html#print) and [`type()`](https://docs.python.org/3/library/functions.html#type). You've also used the functions [`str()`](https://docs.python.org/3/library/functions.html#func-str), [`int()`](https://docs.python.org/3/library/functions.html#int), [`bool()`](https://docs.python.org/3/library/functions.html#bool) and [`float()`](https://docs.python.org/3/library/functions.html#float) to switch between data type. These are built-in functions as well.
+[TODO] add introduction explaining functions and SCTs a bit
+
+**Example exercise below**
 
 Calling a function is easy. To get the type of `3.0` and store the output as a new variable, `result`, you can use the following:
 
@@ -20,14 +22,14 @@ output = function_name(input)
 ```
 
 *** =instructions
+- Use [`int()`](https://docs.python.org/3/library/functions.html#int) to convert `var2` to an integer. Store the output as `out`.
 - Use [`print()`](https://docs.python.org/3/library/functions.html#print) in combination with [`type()`](https://docs.python.org/3/library/functions.html#type) to print out the type of `var1`.
 - Use [`len()`](https://docs.python.org/3/library/functions.html#len) to get the length of the list `var1`. Wrap it in a [`print()`](https://docs.python.org/3/library/functions.html#print) call to directly print it out.
-- Use [`int()`](https://docs.python.org/3/library/functions.html#int) to convert `var2` to an integer. Store the output as `out2`.
 
 *** =hint
+- `int(x)` will convert `x` to an integer.
 - Call the [`type()`](https://docs.python.org/3/library/functions.html#type) function like this: `type(var1)`.
 - Call [`print()`](https://docs.python.org/3/library/functions.html#print) like you did so many times before. Simply put the variable you want to print in parentheses.
-- `int(x)` will convert `x` to an integer.
 
 *** =pre_exercise_code
 ```{python}
@@ -37,8 +39,8 @@ output = function_name(input)
 *** =sample_code
 ```{python}
 # Create variables var1 and var2
-var1 = [1, 2, 3, 4]
-var2 = True
+var1 = True
+var2 = [1, 2, 3, 4]
 
 # Print out type of var1
 
@@ -53,40 +55,40 @@ var2 = True
 *** =solution
 ```{python}
 # Create variables var1 and var2
-var1 = [1, 2, 3, 4]
-var2 = True
-
-# Print out type of var1
-print(type(var1))
-
-# Print out length of var1
-print(len(var1))
+var1 = True
+var2 = [1, 2, 3, 4]
 
 # Convert var2 to an integer: out2
-out2 = int(var2)
+out = int(var1)
+
+# Print out type of var1
+print(type(var2))
+
+# Print out length of var1
+print(len(var2))
 ```
 
 *** =sct
 ```{python}
 msg = "You don't have to change or remove the predefined variables."
-test_object("var1", undefined_msg = msg, incorrect_msg = msg)
-test_object("var2", undefined_msg = msg, incorrect_msg = msg)
+Ex().test_object("var1", undefined_msg = msg, incorrect_msg = msg)
+Ex()test_object("var2", undefined_msg = msg, incorrect_msg = msg)
+
+
+msg_missing_int = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) to make an integer of `var2` and assign to `out2`."
+msg_incorrect_int = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) with the correct variables. You should pass `var2` to it."
+Ex().check_function("int", 0, missing_msg =  msg_missing_int) \
+    .has_equal_ast(msg_incorrect_int)
+    
+Ex().test_object("out", incorrect_msg = "Make sure to assign the correct value to `out`.")
 
 msg = "Make sure to print out the type of `var1` like this: `print(type(var1))`."
-test_function("type", 1, incorrect_msg = msg)
-test_function("print", 1, incorrect_msg = msg)
+Ex().test_function("type", 1, incorrect_msg = msg)
+Ex().test_function("print", 1, incorrect_msg = msg)
 
 msg = "Make sure to print out the length of `var1` like this: `print(len(var1))`."
-test_function("len", 1, incorrect_msg = msg)
-test_function("print", 2, incorrect_msg = msg)
-
-test_object("out2", do_eval = False)
-
-test_function("int", not_called_msg = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) to make an integer of `var2` and assign to `out2`.",
-                     incorrect_msg = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) with the correct variables. You should pass `var2` to it."
-)
-test_object("out2", incorrect_msg = "Make sure to assign the correct value to `out2`.")
-success_msg("Great job! The [`len()`](https://docs.python.org/3/library/functions.html#len) function is extremely useful: it also works on strings to count the number of characters!")
+Ex().test_function("len", 1, incorrect_msg = msg)
+Ex().test_function("print", 2, incorrect_msg = msg)
 ```
 
 
