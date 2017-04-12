@@ -70,25 +70,30 @@ print(len(var2))
 
 *** =sct
 ```{python}
-msg = "You don't have to change or remove the predefined variables."
-Ex().test_object("var1", undefined_msg = msg, incorrect_msg = msg)
-Ex()test_object("var2", undefined_msg = msg, incorrect_msg = msg)
-
 
 msg_missing_int = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) to make an integer of `var2` and assign to `out2`."
 msg_incorrect_int = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) with the correct variables. You should pass `var2` to it."
-Ex().check_function("int", 0, missing_msg =  msg_missing_int) \
-    .has_equal_ast(msg_incorrect_int)
-    
+
+(Ex() 
+    # SCT below will fail the submission if int() wasn't used.
+    # if it was used, it selects the code for the 1st int() call
+    .check_function("int", 0, missing_msg =  msg_missing_int)
+    # SCT below checks that the contents of the function call have the same
+    # abstract syntax tree (AST) code representation in the submission and solution
+    # (e.g. `type(var1)` in solution matches submission)
+    .has_equal_ast(msg_incorrect_int))
+
+# use test_object after checking the int() call, to make sure it returned the correct results.
 Ex().test_object("out", incorrect_msg = "Make sure to assign the correct value to `out`.")
 
+# TODO explain
 msg = "Make sure to print out the type of `var1` like this: `print(type(var1))`."
-Ex().test_function("type", 1, incorrect_msg = msg)
-Ex().test_function("print", 1, incorrect_msg = msg)
+Ex().check_function("type", 0).check_args(0).has_equal_value(msg)
+Ex().check_function("print", 0).check_args(0).has_equal_value(msg)
 
 msg = "Make sure to print out the length of `var1` like this: `print(len(var1))`."
-Ex().test_function("len", 1, incorrect_msg = msg)
-Ex().test_function("print", 2, incorrect_msg = msg)
+Ex().check_function("len", 0).has_equal_value(msg)
+Ex().check_function("print", 1).has_equal_value(msg)
 ```
 
 
