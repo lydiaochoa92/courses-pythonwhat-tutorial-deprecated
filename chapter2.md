@@ -250,7 +250,7 @@ success_msg("Nice! Head over to the next exercise.")
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:497811536f
-## Testing method calls (TODO: appending to list)
+## Testing method calls (TODO: make friendlier example)
 
 
 *** =instructions
@@ -264,15 +264,31 @@ success_msg("Nice! Head over to the next exercise.")
 
 *** =sample_code
 ```{python}
+x = [['a', 'b'],['x', 'y']]
 
+x[0].append('c')
 ```
 
 *** =solution
 ```{python}
+x = [['a', 'b'],['x', 'y']]
 
+x[0].append('c')
 ```
 
 *** =sct
 ```{python}
-
+# for the SCT below, 
+#    code specifies the code whose AST must be in the solution
+#    exact = False, says that it just needs to be contained in the solution somewhere,
+#            like using 'a' in 'a b c' rather than 'a' == 'a b c'
+#
+# note that these submissions would work also:
+#   x[0].append("c")
+#   x[0].append( """c""" )
+# but these solutions fail (produce different ASTs)
+#   x[0] += ['c']
+code = "x[0].append('c')"
+msg = "Make sure you used `%s`" % code
+Ex().has_equal_ast(code=code, exact=False)
 ```
