@@ -250,7 +250,18 @@ success_msg("Nice! Head over to the next exercise.")
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:497811536f
-## Testing method calls (TODO: make friendlier example)
+## Testing method calls
+
+Often exercises can get pretty hairy. For example, checking a chain of indexing a method calls.
+For example, the chain below...
+
+```
+x[0].append('c')
+```
+
+Gets the first element of `x`, and then calls that element's append method.
+In the example below, we should how to use `has_equal_ast` as a quick and dirty
+way to examine this style of method call chaining.
 
 
 *** =instructions
@@ -291,6 +302,14 @@ x[0].append('c')
 code = "x[0].append('c')"
 msg = "Make sure you used `%s`" % code
 Ex().has_equal_ast(code=code, exact=False)
+
+# note that you can also check an earlier piece of a statement
+# to visualize ast, see:
+#       https://sqlwhat-viewer.herokuapp.com/static/index.html#/editor?grammar=python
+#
+# comment SCTs above to see these in action...
+Ex().has_equal_ast("did you use `x[0]`?", code = "x[0]", exact = False)
+Ex().has_equal_ast("did you use `x[0].append`?", code = "x[0].append", exact = False)
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:fd9099d8c4
