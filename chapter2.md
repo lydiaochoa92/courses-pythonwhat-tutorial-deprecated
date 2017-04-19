@@ -292,3 +292,57 @@ code = "x[0].append('c')"
 msg = "Make sure you used `%s`" % code
 Ex().has_equal_ast(code=code, exact=False)
 ```
+
+--- type:NormalExercise lang:python xp:100 skills:2 key:fd9099d8c4
+## Testing function call result
+
+In this example, we have the student define a custom function, in which they should call `max`.
+The order of the arguments to `max` don't matter, so both versions below should pass:
+
+* `max(input, 0)`
+* `max(0, input)`
+
+Note that the variable `input` is a parameter in the custom function, so it is not defined after running
+the solution script. In order to test the output of the `max` function call, we use the SCT to define `input`
+beforehand.
+
+
+*** =instructions
+
+*** =hint
+
+*** =pre_exercise_code
+```{python}
+
+```
+
+*** =sample_code
+```{python}
+def relu(input):
+    # order of arguments doesn't matter
+    output = max(____, ____)
+    
+    return(output)
+```
+
+*** =solution
+```{python}
+def relu(input):
+    # order of arguments doesn't matter
+    output = max(0, input)
+    
+    return(output)
+```
+
+*** =sct
+```{python}
+# Note: check_function_def explained in chapter user defined functions
+#       the key here is that the line below gets the body of the function `relu`
+relu_body = Ex().check_function_def('relu').check_body()
+# Get the 'max' function, then test its output with different values of the input variable
+# see http://pythonwhat.readthedocs.io/en/latest/expression_tests.html
+relu_body.check_function('max', 0, signature = False) \
+         .has_equal_value(extra_env = {'input': 1}) \
+         .has_equal_value(extra_env = {'input': -.5})
+
+```
