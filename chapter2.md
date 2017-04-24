@@ -113,24 +113,13 @@ Ex().check_function("print", 1).has_equal_value(msg)
 --- type:NormalExercise lang:python xp:100 skills:2 key:7432a6376f
 ## Import package
 
-As a data scientist, some notions of geometry never hurt. Let's refresh some of the basics.
-
-For a fancy clustering algorithm, you want to find the circumference $C$ and area $A$ of a circle. When the radius of the circle is `r`, you can calculate $C$ and $A$ as:
-
-$$C = 2 \pi r$$
-$$A = \pi r^2 $$
-
 To use the constant `pi`, you'll need the `math` package. A variable `r` is already coded in the script. Fill in the code to calculate `C` and `A` and see how the [`print()`](https://docs.python.org/3/library/functions.html#print) functions create some nice printouts.
 
 *** =instructions
 - Import the `math` package. Now you can access the constant `pi` with `math.pi`.
-- Calculate the circumference of the circle and store it in `C`.
-- Calculate the area of the circle and store it in `A`.
 
 *** =hint
 - You can simply use `import math`, and then refer to `pi` with `math.pi`.
-- Use the equation in the assignment to find `C`. Use `*`
-- Use the equation in the assignment to find `A`. Use `*` and `**`.
 
 *** =pre_exercise_code
 ```{python}
@@ -177,15 +166,14 @@ print("Area: " + str(A))
 
 *** =sct
 ```{python}
-msg = "You don't have to change or remove the predefined variables."
-test_object("r", undefined_msg = msg, incorrect_msg = msg)
-test_import("math", same_as = False)
-test_object("C", incorrect_msg = "Your calculation of `C` is not quite correct. You should use `pi` of the `math` package using the dot notation (`.`).")
-test_object("A", incorrect_msg = "Your calculation of `A` is not quite correct. You should use `pi` of the `math` package using the dot notation (`.`).")
-msg = "You don't have to change or remove the predefined `print()` functions at the end."
-test_function("print", 1, not_called_msg = msg, incorrect_msg = msg)
-test_function("print", 2, not_called_msg = msg, incorrect_msg = msg)
-success_msg("Nice!")
+# see http://pythonwhat.readthedocs.io/en/latest/simple_tests/test_import.html
+# Note that same_as = False accepts the submission even if it uses an alias
+#    e.g. "import math as m"
+Ex().test_import("math", same_as = False)
+
+# Note that the test above is more robust than the SCT below,
+# since it would fail if submission used "import math as m"
+# Ex().has_equal_ast(code = 'import math', exact = False)
 ```
 
 
