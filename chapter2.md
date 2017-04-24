@@ -5,7 +5,12 @@ description : Insert the chapter description here
 --- type:NormalExercise lang:python xp:100 skills:2 key:c422ee929b
 ## function calls
 
-[TODO] add introduction explaining functions and SCTs a bit
+This exercise will consider two ways in which a function call can be used:
+
+1. a straightforward expression. e.g. `max(1,2)`.
+2. within another function call. e.g. `print(type(3.0))`.
+
+The SCT for the example below will show how to test both these types of calls.
 
 **Example exercise below**
 
@@ -22,14 +27,11 @@ output = function_name(input)
 ```
 
 *** =instructions
-- Use [`int()`](https://docs.python.org/3/library/functions.html#int) to convert `var2` to an integer. Store the output as `out`.
-- Use [`print()`](https://docs.python.org/3/library/functions.html#print) in combination with [`type()`](https://docs.python.org/3/library/functions.html#type) to print out the type of `var1`.
-- Use [`len()`](https://docs.python.org/3/library/functions.html#len) to get the length of the list `var1`. Wrap it in a [`print()`](https://docs.python.org/3/library/functions.html#print) call to directly print it out.
+- Use `int()` to convert `var1` to an integer. Store the output as `out`.
+- Use `print()` in combination with `type()` to print out the type of `var2`.
+- Use `print()` in combination with `len()` to get the length of the list `var2`.
 
 *** =hint
-- `int(x)` will convert `x` to an integer.
-- Call the [`type()`](https://docs.python.org/3/library/functions.html#type) function like this: `type(var1)`.
-- Call [`print()`](https://docs.python.org/3/library/functions.html#print) like you did so many times before. Simply put the variable you want to print in parentheses.
 
 *** =pre_exercise_code
 ```{python}
@@ -42,13 +44,14 @@ output = function_name(input)
 var1 = True
 var2 = [1, 2, 3, 4]
 
-# Print out type of var1
+# Convert var1 to an integer: out
 
 
-# Print out length of var1
+# Print out type of var2
 
 
-# Convert var2 to an integer: out2
+# Print out length of var2
+
 
 ```
 
@@ -58,21 +61,22 @@ var2 = [1, 2, 3, 4]
 var1 = True
 var2 = [1, 2, 3, 4]
 
-# Convert var2 to an integer: out2
+# Convert var1 to an integer: out
 out = int(var1)
 
-# Print out type of var1
+# Print out type of var2
 print(type(var2))
 
-# Print out length of var1
+# Print out length of var2
 print(len(var2))
 ```
 
 *** =sct
 ```{python}
 
-msg_missing_int = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) to make an integer of `var2` and assign to `out2`."
-msg_incorrect_int = "Use [`int()`](https://docs.python.org/3/library/functions.html#int) with the correct variables. You should pass `var2` to it."
+# test instruction 1, int(var1) ----------------------------------------------------------------------
+msg_missing_int = "Use `int()` to make an integer of `var1` and assign to `out`."
+msg_incorrect_int = "Use `int()` with the correct variables. You should pass `var1` to it."
 
 (Ex() 
     # SCT below will fail the submission if int() wasn't used.
@@ -86,12 +90,21 @@ msg_incorrect_int = "Use [`int()`](https://docs.python.org/3/library/functions.h
 # use test_object after checking the int() call, to make sure it returned the correct results.
 Ex().test_object("out", incorrect_msg = "Make sure to assign the correct value to `out`.")
 
-# TODO explain
-msg = "Make sure to print out the type of `var1` like this: `print(type(var1))`."
+# test instruction 2 ---------------------------------------------------------------------------------
+msg = "Make sure to print out the type of `var2` like this: `print(type(var2))`."
+# SCT below gets the first instance where type was used, then gets its first argument.
+#     has_equal_value runs the code for that argument (i.e. `var2` in the solution code), and
+#     verifies the submission and solution results are the equal.
 Ex().check_function("type", 0).check_args(0).has_equal_value(msg)
+
+# Similar to above, but the first argument to print should be equivalent to type(var2),
+# which we check using has_equal_value
 Ex().check_function("print", 0).check_args(0).has_equal_value(msg)
 
-msg = "Make sure to print out the length of `var1` like this: `print(len(var1))`."
+# test instruction 3 ---------------------------------------------------------------------------------
+msg = "Make sure to print out the length of `var2` like this: `print(len(var2))`."
+# SCTs below are similar to above, except they test the value of the whole function call
+# rather than a single argument
 Ex().check_function("len", 0).has_equal_value(msg)
 Ex().check_function("print", 1).has_equal_value(msg)
 ```
