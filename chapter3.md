@@ -55,15 +55,11 @@ for_loop.check_body().has_equal_output(incorrect_msg = msg, context_vals = ["tes
 --- type:NormalExercise lang:python xp: skills: key:8da0db3df3
 ## list comprehension
 
-You now have all the knowledge necessary to begin writing list comprehensions! Your job in this exercise is to write a list comprehension
-that produces a list of the squares of the numbers ranging from 0 to 9. 
-
 *** =instructions
 - Using the range of numbers from `0` to `9` as your iterable and `i` as your iterator variable, write a list comprehension that produces a list of numbers consisting of the squared values of `i`. 
 
 *** =hint
-- The basic syntax for a list comprehension is `[`_output expression_ `for` _iterator variable_ `in` _iterable_`]`. The _output expression_ here is `i**2`, the _iterator variable_ is `i`, and the iterable is `range(0,10)`.
- 
+
 
 *** =pre_exercise_code
 ```{python}
@@ -87,11 +83,24 @@ squares = [i**2 for i in range(0,10)]
 *** =sct
 ```{python}
 # Spec2 
-Ex().test_list_comp(iter_vars_names=True)
-list_comp = Ex().check_list_comp(0, missing_msg="Did you use a list comprehension to turn the list of lists into a list of dicts?")
-list_comp.check_body().set_context(i=4).has_equal_value('Are you squaring each value of `i`?', error_msg='Are you squaring each value of `i`?')
-#list_comp.check_body().test_student_typed('i\*\*2', not_typed_msg='Are you squaring each value of `i`?')
-list_comp.check_iter().has_equal_value('Are you iterating over `range(0,10)`?') 
+missing_msg="Did you use a list comprehension to turn the list of lists into a list of dicts?"
+list_comp = Ex().check_list_comp(0, missing_msg = missing_msg)
+
+# test that they defined the correct number of iterator variables
+# setting exact_names to True also requires they have the same
+# variable name as those in the solution
+list_comp.has_context(exact_names = True)
+
+# test body of list comprehension
+list_comp \
+    .check_body() \
+    .set_context(i=4) \
+    .has_equal_value('Are you squaring each value of `i`?', error_msg='Are you squaring each value of `i`?')
+
+# test iterator of list comprehension
+list_comp \
+    .check_iter() \
+    .has_equal_value('Are you iterating over `range(0,10)`?') 
            
 ```
 
@@ -99,21 +108,10 @@ list_comp.check_iter().has_equal_value('Are you iterating over `range(0,10)`?')
 --- type:NormalExercise lang:python xp:100 skills:2 key:8e9ef7d8a3
 ## list comprehension w/ conditional
 
-You've been using list comprehensions to build lists of values, sometimes using operations to create these values. 
-
-An interesting mechanism in list comprehensions is that you can also create lists with values that meet only a certain condition. One way of doing this is by using conditionals on iterator variables. In this exercise, you will do exactly that!
-
-Recall from the video that you can apply a conditional statement to test the iterator variable by adding an `if` statement in the optional _predicate expression_ part after the `for` statement in the comprehension: 
-
-`[` _output expression_ `for` _iterator variable_ `in` _iterable_ `if` _predicate expression_ `]`. 
-
-You will use this recipe to write a list comprehension for this exercise. You are given a list of strings `fellowship` and, using a list comprehension, you will create a list that only includes the members of `fellowship` that have 7 characters or more.
-
 *** =instructions
 - Use `member` as the iterator variable in the list comprehension. For the conditional, use `len()` to evaluate the iterator variable. Note that you only want strings with 7 characters or more.
 
 *** =hint
-- You don't have to perform any additional operations on `member` for the output expression. You should also start the conditional with the keyword `if` followed by the boolean expression for evaluating the iterator variable.
 
 *** =pre_exercise_code
 ```{python}
@@ -128,9 +126,6 @@ fellowship = ['frodo', 'samwise', 'merry', 'aragorn', 'legolas', 'boromir', 'gim
 # Create list comprehension: new_fellowship
 new_fellowship = [____ for ____ in fellowship ____]
 
-# Print the new list
-print(new_fellowship)
-
 ```
 
 *** =solution
@@ -141,30 +136,41 @@ fellowship = ['frodo', 'samwise', 'merry', 'aragorn', 'legolas', 'boromir', 'gim
 # Create list comprehension: new_fellowship
 new_fellowship = [member for member in fellowship if len(member) >= 7]
 
-# Print the new list
-print(new_fellowship)
-
 ```
 
 *** =sct
 ```{python}
 
-# Test: fellowship object
-test_object(
-    "fellowship",
-    undefined_msg="You don't have to change any of the predefined code.",
-    incorrect_msg="You don't have to change any of the predefined code."
-)
-
 # Test: list comprehension
-Ex().test_list_comp(iter_vars_names=True)
 list_comp = Ex().check_list_comp(0, missing_msg="Did you create the list comprehension?")
-list_comp.check_body().set_context(member='samwise').has_equal_value('Did you use `member` as your iterator variable?', error_msg='Did you use `member` as your iterator variable?')
+
+# test body
+list_comp \
+    .check_body() \
+    .set_context(member='samwise') \
+    .has_equal_value('Did you use `member` as your iterator variable?', 
+                     error_msg='Did you use `member` as your iterator variable?')
+
+# test iterator
 list_comp.check_iter().has_equal_value(error_msg='Are you using `fellowship` as your iterable?')
-list_comp.check_ifs(0).multi(set_context(member='samwise').has_equal_value(incorrect_msg='Did you create a list that only includes strings with 7 characters or more?', error_msg='Did you compute the length of each string using `len(member)`?'), set_context(member='frodoo').has_equal_value(incorrect_msg ='Did you create a list that only includes strings with 7 characters or more?', error_msg='Did you create a list that only includes strings with 7 characters or more?'))
 
-success_msg("Great work!")
+# test ifs
+msg_incorrect = 'Did you create a list that only includes strings with 7 characters or more?'
+msg_error = 'Did you create a list that only includes strings with 7 characters or more?'
 
+# NOTE: putting an SCT in parentheses allows us to omit '\' when chaining SCTs
+#       this makes it easier to include comments in a chain
+(list_comp
+    # note that we need to specify which if to check (here index = 0)
+    .check_ifs(0)
+    # mutli allows you to run multiple SCTs on the code focused by check_ifs
+    .multi(
+        # test w/case that should pass the if
+        set_context(member='samwise').has_equal_value(incorrect_msg=msg_incorrect, error_msg=msg_error),
+        # test w/case that should not pass the if
+        set_context(member='frodo').has_equal_value(incorrect_msg=msg_incorrect, error_msg=msg_error)
+        ))
+        
 ```
 
 
