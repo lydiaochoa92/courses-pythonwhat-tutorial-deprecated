@@ -113,7 +113,7 @@ Ex().check_function("print", 1).has_equal_value(msg)
 --- type:NormalExercise lang:python xp:100 skills:2 key:7432a6376f
 ## Import package
 
-To use the constant `pi`, students will need to import the `math` package. The exercise below shows how imports can be tested.
+Often, exercises require importing libraries. For example, using the constant `pi` requires the `math` package. The exercise below shows how imports can be tested.
 
 *** =instructions
 - Import the `math` package. Now you can access the constant `pi` with `math.pi`.
