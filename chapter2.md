@@ -113,13 +113,13 @@ Ex().check_function("print", 1).has_equal_value(msg)
 --- type:NormalExercise lang:python xp:100 skills:2 key:7432a6376f
 ## Import package
 
-To use the constant `pi`, you'll need the `math` package. A variable `r` is already coded in the script. Fill in the code to calculate `C` and `A` and see how the [`print()`](https://docs.python.org/3/library/functions.html#print) functions create some nice printouts.
+To use the constant `pi`, students will need to import the `math` package. The exercise below shows how imports can be tested.
 
 *** =instructions
 - Import the `math` package. Now you can access the constant `pi` with `math.pi`.
+- Import the `radius` function from `math`
 
 *** =hint
-- You can simply use `import math`, and then refer to `pi` with `math.pi`.
 
 *** =pre_exercise_code
 ```{python}
@@ -128,40 +128,21 @@ To use the constant `pi`, you'll need the `math` package. A variable `r` is alre
 
 *** =sample_code
 ```{python}
-# Definition of radius
-r = 0.43
-
 # Import the math package
 
 
-# Calculate C
-C = 0
+# Import radians from math package
 
-# Calculate A
-A = 0
 
-# Build printout
-print("Circumference: " + str(C))
-print("Area: " + str(A))
 ```
 
 *** =solution
 ```{python}
-# Definition of radius
-r = 0.43
-
 # Import the math package
 import math
 
-# Calculate C
-C = 2 * r * math.pi
-
-# Calculate A
-A = math.pi * r ** 2
-
-# Build printout
-print("Circumference: " + str(C))
-print("Area: " + str(A))
+# Import radians from math package
+from math import radians
 ```
 
 *** =sct
@@ -174,81 +155,12 @@ Ex().test_import("math", same_as = False)
 # Note that the test above is more robust than the SCT below,
 # since it would fail if submission used "import math as m"
 # Ex().has_equal_ast(code = 'import math', exact = False)
+
+Ex().test_import("math.radians", 
+                 not_imported_msg = "Be sure to import `radians`", 
+                 incorrect_as_msg = "Don't set any alias for `radians`.")
 ```
 
-
-
---- type:NormalExercise lang:python xp:100 skills:2 key:fe65eff50a
-## Import y from x
-
-General imports, like `import math`, make **all** functionality from the `math` package available to you. However, if you decide to only use a specific part of a package, you can always make your import more selective:
-
-```
-from math import pi
-```
-
-Let's say the Moon's orbit around planet Earth is a perfect circle, with a radius `r` (in km) that is defined in the script.
-
-*** =instructions
-- Perform a selective import from the `math` package where you only import the `radians` function.
-- Calculate the distance travelled by the Moon over 12 degrees of its orbit. Assign the result to `dist`. You can calculate this as $r * \phi$, where $r$ is the radius and $\phi$ is the angle in radians. To convert an angle in degrees to an angle in radians, use the [`radians()`](https://docs.python.org/3/library/math.html#math.radians) function, which you just imported.
-- Print out `dist`.
-
-*** =hint
-- Use `from math import radians` to do the selective import.
-- You can simply use the [`radians()`](https://docs.python.org/3/library/math.html#math.radians) function now. Pass the function the number 12 to get the angle in radians.
-- To print out a variable `x`, simply type `print(x)`.
-
-*** =pre_exercise_code
-```{python}
-# pec
-```
-
-*** =sample_code
-```{python}
-# Definition of radius
-r = 192500
-
-# Import radians function of math package
-
-
-# Travel distance of Moon if 12 degrees. Store in dist.
-
-
-# Print out dist
-
-```
-
-*** =solution
-```{python}
-# Definition of radius
-r = 192500
-
-# Import radians function of math package
-from math import radians
-
-# Travel distance of Moon if 12 degrees. Store in dist.
-dist = r * radians(12)
-
-# Print out dist
-print(dist)
-```
-
-*** =sct
-```{python}
-msg = "You don't have to change or remove the predefined variables."
-test_object("r", undefined_msg = msg, incorrect_msg = msg)
-
-test_import("math.radians", not_imported_msg = "Be sure to import [`radians()`](https://docs.python.org/3/library/math.html#math.radians) from the `math` package. You should use the `from ___ import ___` notation.", incorrect_as_msg = "Don't set any alias for [`radians()`](https://docs.python.org/3/library/math.html#math.radians). Just type `from math import radians`.")
-
-test_object("dist", do_eval = False)
-test_function("math.radians", 1, incorrect_msg = "Call [`radians()`](https://docs.python.org/3/library/math.html#math.radians) with argument `12`.", not_called_msg = "Your calculation of `dist` is not quite correct. You should use [`radians()`](https://docs.python.org/3/library/math.html#math.radians) from the `math` package. If you imported correctly, you don't have to use the dot (`.`) notation.")
-test_object("dist", incorrect_msg = "Assign the result of your calculations to `dist`.")
-
-test_function("print", incorrect_msg = "Make sure to print out `dist` using `print(dist)`.")
-
-success_msg("Nice! Head over to the next exercise.")
-```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:497811536f
 ## Testing method calls
