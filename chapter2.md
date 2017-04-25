@@ -162,8 +162,62 @@ Ex().test_import("math.radians",
 ```
 
 
+
+--- type:NormalExercise lang:python xp:100 skills:2 key:243b0fb89c
+## Testing method calls (1)
+
+Methods are functions that are called from an object.
+For example, the code below creates a string object (assigned to `x`),
+and then calls its `strip` method.
+This method returns a new string, whose `capitalize` method is then called.
+
+```
+x = " datacamp "
+x.strip().capitalize()   # results in "Datacamp"
+```
+
+How to test "chains" of methods like the one above is shown in this exercise.
+
+
+*** =instructions
+
+*** =hint
+
+*** =pre_exercise_code
+```{python}
+
+```
+
+*** =sample_code
+```{python}
+x = " datacamp "
+x.strip().capitalize()   # results in "Datacamp"
+
+```
+
+*** =solution
+```{python}
+x = " datacamp "
+x.strip().capitalize()   # results in "Datacamp"
+
+```
+
+*** =sct
+```{python}
+
+# The SCT check_function below gets the code corresponding to the strip call
+# Note that signature = False is necessary because pythonwhat can not always
+# match function signatures for built-ins
+# see: http://pythonwhat.readthedocs.io/en/latest/part_checks.html#matching-signatures
+msg = "Did you use `x.strip()`?"
+Ex().check_function('x.strip', 0, signature = False, missing_msg = msg)
+
+# Check the capitalize portion
+Ex().check_function('x.strip.capitalize', 0, signature=False)
+
+```
 --- type:NormalExercise lang:python xp:100 skills:2 key:497811536f
-## Testing method calls
+## Testing method calls (2)
 
 Often exercises can get pretty hairy. For example, checking a chain of indexing a method calls.
 For example, the chain below...
