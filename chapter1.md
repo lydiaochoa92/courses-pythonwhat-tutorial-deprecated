@@ -113,6 +113,22 @@ Ex().test_object("factor")
 # NOTE: comment out code above to see this SCT in action
 Ex().check_object("factor").is_instance(float).has_equal_value()
 
+# NOTE on floating point comparisons booby traps ---------------------------
+# floating point comparisons can return false, even when two sets of
+# operations are mathematically equivalent. For example, x and y are
+# not equal in Python
+#
+#   a = [1.1, 1.2, 1.3]
+#   x = (sum(a[:-1])/3 + a[-1]/3)     # 3.5999999999
+#   y = (a[0]/3 + sum(a[1:])/3)       # 3.6
+#   x == y                            # False
+#   round(x, 10) == round(y, 10)      # True
+#
+# In order to flexibly test for equivalence in these cases, you can
+# round the results to a desired decimal place.
+# For example, to test a floating point variable x,
+#   Ex().has_equal_value(expr_code = 'round(x, 10)')
+
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:e2cb3a665e
