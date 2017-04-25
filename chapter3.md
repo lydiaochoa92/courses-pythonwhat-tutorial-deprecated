@@ -303,11 +303,6 @@ outer_comp \
 --- type:NormalExercise lang:python xp:100 skills:2 key:721dc6b47c
 ## dict comprehensions
 
-Comprehensions aren't relegated merely to the world of lists. There are many other objects you can build using comprehensions, such as dictionaries, pervasive objects in Data Science. You will create a dictionary using the comprehension syntax for this exercise. In this case, the comprehension is called a **dict comprehension**.
-
-Recall that the main difference between a _list comprehension_ and a _dict comprehension_ is the use of _curly braces_ `{}` instead of `[]`. Additionally, members of the dictionary are created using a colon `:`, as in _key_`:`_value_.
-
-You are given a list of strings `fellowship` and, using a **dict comprehension**, create a dictionary with the members of the list as the _keys_ and the length of each string as the corresponding _values_.
 
 *** =instructions
 - Create a dict comprehension where the _key_ is a string in `fellowship` and the _value_ is the length of the string. Remember to use the syntax _key_`:`_value_ in the _output expression_ part of the comprehension to create the members of the dictionary. Use `member` as the iterator variable.
@@ -328,9 +323,6 @@ fellowship = ['frodo', 'samwise', 'merry', 'aragorn', 'legolas', 'boromir', 'gim
 # Create dict comprehension: new_fellowship
 new_fellowship = ____
 
-# Print the new list
-print(new_fellowship)
-
 ```
 
 *** =solution
@@ -341,43 +333,31 @@ fellowship = ['frodo', 'samwise', 'merry', 'aragorn', 'legolas', 'boromir', 'gim
 # Create dict comprehension: new_fellowship
 new_fellowship = {member:len(member) for member in fellowship}
 
-# Print the new list
-print(new_fellowship)
-
 ```
 
 *** =sct
 ```{python}
 
-# Test: fellowship object
-test_object(
-    "fellowship",
-    undefined_msg="You don't have to change any of the predefined code.",
-    incorrect_msg="You don't have to change any of the predefined code."
-)
-
 # Test: dict comprehension
-Ex().test_dict_comp(iter_vars_names=True)
 dict_comp = Ex().check_dict_comp(0, missing_msg="Did you create a dict comprehension?")
-dict_comp.check_key().set_context(member='samwise').has_equal_value('Are you using `member` as your iterator variable?', error_msg='Are you using `member` as your iterator variable?')
-dict_comp.check_value().test_function('len', do_eval=False)
-dict_comp.check_iter().has_equal_value('Did you use `fellowship` as your iterable?')
 
+# Test dict comp key part
+dict_comp \
+    .check_key() \
+    .set_context(member='samwise') \
+    .has_equal_value(incorrect_msg='Are you using `member` as your iterator variable?',
+                     error_msg='Are you using `member` as your iterator variable?')
 
-# Test: new_fellowship object
-test_object(
-    "new_fellowship",
-    do_eval=False
-)
+# Test dict comp value part
+# Note: we only test whether `len` was used
+dict_comp \
+    .check_value() \
+    .check_function('len', 0)
 
-# Test: print() call
-test_function(
-    "print",
-    not_called_msg="You don't have to change any of the predefined code.",
-    incorrect_msg="You don't have to change any of the predefined code."
-)
-
-success_msg("Great work!")
+# Test dict comp iter part
+dict_comp \
+    .check_iter() \
+    .has_equal_value('Did you use `fellowship` as your iterable?')
 
 ```
 
