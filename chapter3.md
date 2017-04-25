@@ -178,15 +178,13 @@ msg_error = 'Did you create a list that only includes strings with 7 characters 
 --- type:NormalExercise lang:python xp:100 skills:2 key:f8cb706e3f
 ## list comprehension w/ conditional 2
 
-In the previous exercise, you used an `if` conditional statement in the _predicate expression_ part of a list comprehension to evaluate an iterator variable. In this exercise, you will use an `if-else` statement on the _output expression_ of the list.
-
-You will work on the same list, `fellowship` and, using a list comprehension and an `if-else` conditional statement in the output expression, create a list that keeps members of `fellowship` with 7 or more characters and replaces others with an empty string. Use `member` as the iterator variable in the list comprehension. 
+The previous exercise an `if` conditional statement in the _predicate expression_ part of a list comprehension.
+In this exercise, we will test an `if-else` statement in the _output expression_, or body, of the list comprehension.
 
 *** =instructions
 - In the output expression, keep the string as-is **if** the number of characters is >= 7, **else** replace it with an _empty string_.
 
 *** =hint
-- The first part of the conditional is an `if` statement followed by the boolean expression for evaluating the iterator variable. The second part is an `else` statement.
 
 *** =pre_exercise_code
 ```{python}
@@ -201,9 +199,6 @@ fellowship = ['frodo', 'samwise', 'merry', 'aragorn', 'legolas', 'boromir', 'gim
 # Create list comprehension: new_fellowship
 new_fellowship = [____ for ____ in fellowship]
 
-# Print the new list
-print(new_fellowship)
-
 ```
 
 *** =solution
@@ -214,41 +209,28 @@ fellowship = ['frodo', 'samwise', 'merry', 'aragorn', 'legolas', 'boromir', 'gim
 # Create list comprehension: new_fellowship
 new_fellowship = [member if len(member) >= 7 else '' for member in fellowship]
 
-# Print the new list
-print(new_fellowship)
-
 ```
 
 *** =sct
 ```{python}
 
-# Test: fellowship object
-test_object(
-    "fellowship",
-    undefined_msg="You don't have to change any of the predefined code.",
-    incorrect_msg="You don't have to change any of the predefined code."
-)
-
 # Test: list comprehension
-Ex().test_list_comp(iter_vars_names=True)
 list_comp = Ex().check_list_comp(0, missing_msg="Did you create the list comprehension?")
-list_comp.check_body().set_context(member='samwise').check_if_exp(0).multi(set_context(member='samwisee').has_equal_value('Are you setting the string to be empty if it is greater than equal to 7 characters?', error_msg='Are you using `member` as your iterator variable?'), set_context(member='frodoo').has_equal_value('Are you setting the string to be empty if it is greater than or equal to 7 characters?', error_msg='Are you setting the string to be empty if it is greater than or equal to 7 characters?'), set_context(member = '').has_equal_value('test', error_msg='test'))
+
+# Test if-else statement (MAIN DIFFERENCE FROM LAST EXERCISE)
+msg_incorrect = 'Are you setting the string to be empty if it is greater than equal to 7 characters?'
+msg_error = 'Are you using `member` as your iterator variable?'
+list_comp.check_body() \
+    .check_if_exp(0) \
+    .multi(
+        set_context(member='samwisee').has_equal_value(msg_incorrect, error_msg=msg_error), set_context(member='frodoo').has_equal_value(msg_incorrect, error_msg=msg_error))
+
+# For clarity, getting the if-else expression can be done with the SCT below
+# Ex().check_list_comp(0).check_body().check_if_exp(0)
+
+# Test iterator
+
 list_comp.check_iter().has_equal_value(error_msg='Did you use `fellowship` as your iterable?')
-
-# Test: new_fellowship object
-test_object(
-    "new_fellowship",
-    do_eval=False
-)
-
-# Test: print() call
-#test_function(
-#    "print",
-#    not_called_msg="You don't have to change any of the predefined code.",
-#    incorrect_msg="You don't have to change any of the predefined code."
-#)
-
-success_msg("Great work!")
 
 ```
 
