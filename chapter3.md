@@ -239,32 +239,12 @@ list_comp.check_iter().has_equal_value(error_msg='Did you use `fellowship` as yo
 --- type:NormalExercise lang:python xp:100 skills:2 key:92d979a1ca
 ## nested list comprehensions
 
-Great! At this point, you have a good grasp of the basic syntax of list comprehensions. Let's push your code-writing skills a little further. In this exercise, you will be writing a list comprehension _within_ another list comprehension, or nested list comprehensions. It sounds a little tricky, but you can do it!
-
-Let's step aside for a while from strings. One of the ways in which lists can be used are in representing multi-dimension objects such as **matrices**. Matrices can be represented as a list of lists in Python. For example a 5 x 5 matrix with values `0` to `4` in each row can be written as:
-
-```
-matrix = [[0, 1, 2, 3, 4],
-          [0, 1, 2, 3, 4],
-          [0, 1, 2, 3, 4],
-          [0, 1, 2, 3, 4],
-          [0, 1, 2, 3, 4]]
-```
-
-Your task is to recreate this matrix by using nested listed comprehensions. Recall that you can create one of the rows of the matrix with a single list comprehension. To create the list of lists, you simply have to supply the list comprehension as the **output expression** of the overall list comprehension:
-
-`[`[_output expression_] `for` _iterator variable_ `in` _iterable_`]`
-
-Note that here, the **output expression** is itself a list comprehension. 
-
 
 *** =instructions
 - In the inner list comprehension - that is, the **output expression** of the nested list comprehension - create a list of values from `0` to `4` using `range()`. Use `col` as the iterator variable. 
 - In the **iterable** part of your nested list comprehension, use `range()` to count 5 rows - that is, create a list of values from `0` to `4`. Use `row` as the iterator variable; note that you won't be needing this to create values in the list of lists.
 
 *** =hint
-- The basic syntax for a list comprehension is `[`_output expression_ `for` _iterator variable_ `in` _iterable_`]`.
-- Use the first list comprehension as the **output expression** of the second list comprehension
 
 *** =pre_exercise_code
 ```{python}
@@ -276,38 +256,48 @@ Note that here, the **output expression** is itself a list comprehension.
 # Create a 5 x 5 matrix using a list of lists: matrix
 matrix = [[____] ____]
 
-# Print the matrix
-for row in matrix:
-    print(row)
-
 ```
 
 *** =solution
 ```{python}
 # Create a 5 x 5 matrix using a list of lists: matrix
-matrix = [[col for col in range(5)] for row in range(5)]
-
-# Print the matrix
-for row in matrix:
-    print(row)
+[[col for col in range(5)] for row in range(5)]
 
 ```
 
 *** =sct
 ```{python}
-# Test: nested comprehension
-Ex().test_correct(test_object('matrix',undefined_msg='Did you create a list of values from `0` to `4` using `range()`?', incorrect_msg='Did you create a list of values from `0` to `4` using `range()`?'),check_list_comp(0).check_body().check_list_comp(0).check_iter().test_function('range', incorrect_msg='Did you create a list of values from `0` to `4` using `range()`?',not_called_msg='Did you create a list of values from `0` to `4` using `range()`?'))
-Ex().check_list_comp(0).check_body().test_list_comp(iter_vars_names=True)
-Ex().check_list_comp(0).check_body().check_list_comp(0).check_body().test_student_typed('col', not_typed_msg='Did you use `col` for the iterator variable?')
+# Test: Outer list comprehension
+#       we set the value of the context variable row here as well
+outer_comp = Ex().check_list_comp(0)
 
-Ex().test_correct(test_object('matrix', undefined_msg='Did you create a list of values from `0` to `4` using `range()`?', incorrect_msg='Did you create a list of values from `0` to `4` using `range()`?'),check_list_comp(0).check_iter().test_function('range'))
-Ex().check_list_comp(0).test_list_comp(iter_vars_names=True)
+inner_comp = outer_comp \
+    .check_body() \
+    .check_list_comp(0)
 
-Ex().check_for_loop(0).check_iter().has_equal_value('You do not need to modify the provided `for` loop.', error_msg='You do not need to modify the provided `for` loop.')
-Ex().check_for_loop(0).check_body().test_function('print', incorrect_msg='You do not need to modify the provided `print()` function.', not_called_msg='You do not need to modify the provided `print()` function.')
+# does its iterator code match the solution?
+inner_comp.check_iter() \
+    .has_equal_ast('Did you create a list of values from `0` to `4` using `range()`?')
 
-success_msg("Great work!")
+# alternatively, could use check_function
+# inner_comp.check_iter().check_function('range', 0) # etc..
 
+# Test the value of the inner range call in the solution
+# Note: temporary variables defined in the comprehensions need to be set
+# on the block of code in which they're first available, so we set
+# the temporary variables row and col separately, using set_context
+outer_comp \
+    .check_body() \
+    .set_context(row = 1) \
+    .check_list_comp(0) \
+    .check_body() \
+    .set_context(col = 2) \
+    .has_equal_value()
+
+# alternatively, if you know the names the student will use for temporary variables
+# you can use extra_env instead. For example, if you known they will use row and col,
+# then you could use the following.
+# has_equal_value(extra_env = {'col': 2, 'row': 1})
 ```
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:721dc6b47c
