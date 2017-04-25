@@ -6,23 +6,11 @@ description : Insert the chapter description here
 --- type:NormalExercise lang:python xp:100 skills:2 key:3f7ec57dda
 ## for loop
 
-Have another look at the `for` loop that Filip showed in the video:
-
-```
-fam = [1.73, 1.68, 1.71, 1.89]
-for height in fam : 
-    print(height)
-```
-
-As usual, you simply have to indent the code with 4 spaces to tell Python which code should be executed in the `for` loop.
-
-The `areas` variable, containing the area of different rooms in your house, is already defined.
 
 *** =instructions
 Write a `for` loop that iterates over all elements of the `areas` list and prints out every element separately.
 
 *** =hint
-Copy and paste the example code and change some variables. This time you're working with `areas` instead of `fam`.
 
 *** =sample_code
 ```{python}
@@ -45,12 +33,22 @@ for area in areas :
 
 *** =sct
 ```{python}
+# get code of for loop
 msg = "Make sure to loop over `areas`"
-test_for_loop(1, for_iter=lambda msg=msg: test_expression_result(incorrect_msg = msg))
+for_loop = Ex().check_for_loop(0)
 
+# for loop iterator
+for_loop.check_iter().has_equal_value(incorrect_msg = msg)
+
+# for loop body
+# note that we can't use has_equal_value below, because the body of a for loop
+# is not necessarily a single python expression (i.e. it doesn't return a value)
 msg = "Print out `area`"
-test_for_loop(1, body=lambda msg=msg: test_expression_output(incorrect_msg = msg, context_vals = ["test"]))
-success_msg("Great! That wasn't too hard, was it?")
+for_loop.check_body().has_equal_output(incorrect_msg = msg, context_vals = ["test"])
+
+# alternatively, could do
+# for_loop.check_body().set_context(area = "test").has_equal_output(incorrect_msg = msg)
+
 ```
 
 
