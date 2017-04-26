@@ -549,31 +549,20 @@ success_msg("Excellent job! Being able to iterate over graphs like this to explo
 --- type:NormalExercise lang:python xp:100 skills:2 key:3ba794b4e4
 ## If else within for loop within with
 
-In the previous exercise, you processed a file line by line for a given number of lines. What if, however, we want to to do this for the entire file? 
-
-In this case, it would be useful to use **generators**. Generators allow users to [_lazily evaluate_ data](http://www.blog.pythonlibrary.org/2014/01/27/python-201-an-intro-to-generators/). 
-This concept of _lazy evaluation_ is useful when you have to deal with very large datasets because it lets you generate values in an efficient manner by _yielding_ only chunks of data at a time instead of the whole thing at once.
-
-In this exercise, you will define a generator function `read_large_file()` that produces a generator object which yields a single line from a file each time `next()` is called on it. The csv file `'world_dev_ind.csv'` is in your current directory for your use.
-
 *** =instructions
-- In the function `read_large_file()`, read a line from `file_object` by using the method `readline()`. Assign the result to `data`.
-- In the function `read_large_file()`, `yield` the line read from the file `data`.
-- In the context manager, create a generator object `gen_file` by calling your generator function `read_large_file()` and passing `file` to it.
-- Print the first three lines produced by the generator object `gen_file` using `next()`.
+
 
 *** =hint
-- To apply a method `x()` to an object `y`, do: `y.x()`.
-- Make sure you produce the line read from the file by using `yield data` inside the `while` loop.
-- Pass `file` as an argument to `read_large_file()`.
-- In the call to `next()`, pass the generator object `gen_file`. Pass this call to the three `print()` calls to print one line after another.
+
 
 *** =pre_exercise_code
 ```{python}
-from urllib.request import urlretrieve
-
-filename = 'https://s3.amazonaws.com/assets.datacamp.com/production/course_1342/datasets/Indicators_red.csv'
-urlretrieve(filename, 'world_dev_ind.csv')
+open('log.txt', 'w').write("""
+LOG: starting server
+LOG: server started
+GET request
+LOG: server error
+""")
 
 ```
 
@@ -581,30 +570,22 @@ urlretrieve(filename, 'world_dev_ind.csv')
 ```{python}
 # Define read_large_file()
 def read_large_file(file_object):
-    """A generator function to read a large file lazily."""
+    """A generator function to iterate over LOG messages."""
 
-    # Loop indefinitely until the end of the file
-    while True:
+    for line in ____:
+        if ____:
+            ____ line
 
-        # Read a line from the file: data
-        data = ____
-
-        # Break if this is the end of the file
-        if not data:
-            break
-
-        # Yield the line of data
-        
 # Open a connection to the file
 with open('world_dev_ind.csv') as file:
 
     # Create a generator object for the file: gen_file
-    gen_file = ____
+    gen_file = read_large_file(file)
 
     # Print the first three lines of the file
-    print(____)
-    print(____)
-    print(____)
+    print(next(gen_file))
+    print(next(gen_file))
+    print(next(gen_file))
 
 ```
 
@@ -612,23 +593,15 @@ with open('world_dev_ind.csv') as file:
 ```{python}
 # Define read_large_file()
 def read_large_file(file_object):
-    """A generator function to read a large file lazily."""
+    """A generator function to iterate over LOG messages."""
 
-    # Loop indefinitely until the end of the file
-    while True:
+    for line in file_object:
+        if line.startswith('LOG'):
+            yield line
 
-        # Read a line from the file: data
-        data = file_object.readline()
-
-        # Break if this is the end of the file
-        if not data:
-            break
-
-        # Yield the line of data
-        yield data
 
 # Open a connection to the file
-with open('world_dev_ind.csv') as file:
+with open('log.txt') as file:
 
     # Create a generator object for the file: gen_file
     gen_file = read_large_file(file)
@@ -647,27 +620,10 @@ with open('world_dev_ind.csv') as file:
 fn_def = Ex().check_function_def('read_large_file')
 
 fn_body = fn_def.check_body()
+loop = fn_body.check_for_loop(0)
+if_else = loop.check_body().check_if_else(0)
 
-fn_body.check_while(0).check_test().has_equal_value("Are you looping indefinitely until the end of the file?")
-
-fn_body.check_while(0).check_body().test_function('file_object.readline')
-
-fn_body.check_while(0).check_body().test_student_typed('yield data', not_typed_msg = "Did you yield the line of `data` at the end of your while loop?")
-
-Ex().check_with(0).check_context(0).check_function('open', index=0).check_args(0).has_equal_value('Did you pass in the correct file name to `open()`?', error_msg='Did you pass in the correct file name to `open()`?')
-Ex().check_with(0).check_context(0).has_equal_ast()
-Ex().test_with(index=1, context_vals=True)
-
-with_body = Ex().check_with(0).check_body()
-
-with_body.test_function('read_large_file', do_eval=False)
-with_body.test_function('next', index=1, do_eval=False)
-#with_body.test_function('print', index=1)
-with_body.test_function('next', index=2, do_eval=False)
-#with_body.test_function('print', index=2)
-with_body.test_function('next', index=3, do_eval=False)
-#with_body.test_function('print', index=3)
-
-success_msg("Great work!")
+if_else.check_test().has_equal_ast("Did you use `line.startswith('LOG')`?")
+if_else.check_body().has_equal_ast("Be sure to only use `yield line`.")
 
 ```
