@@ -5,6 +5,8 @@ description : Insert the chapter description here
 --- type:NormalExercise lang:python xp:100 skills:2 key:2e59e3582b
 ## functions w/o return values
 
+**Full exercise below**
+
 In the last video, Hugo described the basics of how to define a function. You will now write your own function!
 
 Define a function, `shout()`, which simply prints out a string with three exclamation marks `'!!!'` at the end. The code for the `square()` function that we wrote earlier is found below. You can use it as a pattern to define `shout()`.
@@ -69,33 +71,14 @@ shout()
 ```{python}
 # All functions used here are defined in the pythonwhat Python package.
 # Documentation can also be found at github.com/datacamp/pythonwhat/wiki
+fun_def = Ex().check_function_def('shout')
+fun_def \
+    .check_body() \
+    .has_equal_value(name = "shout_word") \
+    .multi(check_function("print", 0, missing_msg = "Be sure to include `print` in your function")) \
+    .has_equal_output("Did you call `print(shout_word)`?")
 
-
-def inner_test():
-    test_object_after_expression("shout_word", 
-    undefined_msg="did you define `shout_word`?",
-    incorrect_msg="did you assign the correct value to `shout_word`?")
-    test_function(
-        "print",
-        args=[],
-        incorrect_msg="did you pass the correct arguments to `print()`?",
-        not_called_msg="make sure you call `print()`."
-    )
-    test_expression_output(incorrect_msg="be sure to print out `shout_word`.")
-
-# Test: shout() function definition
-test_function_definition("shout", body = inner_test)
-
-
-
-# Test: shout() call
-test_function(
-    "shout",
-    incorrect_msg="Make sure you passed the correct arguments to the call to `shout()`."
-)
-
-
-success_msg("Great work!")
+Ex().check_function('shout', 0).has_equal_ast("Did you call `shout` without any arguments?")
 
 ```
 
