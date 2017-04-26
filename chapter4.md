@@ -159,51 +159,41 @@ print(yell)
 
 *** =sct
 ```{python}
-# All functions used here are defined in the pythonwhat Python package.
-# Documentation can also be found at github.com/datacamp/pythonwhat/wiki
 
-def inner_test():
-    test_object_after_expression(
-        "shout1",
-        pre_code = 'shout1=[]',
-        context_vals=["congratulations", "you"],
-        undefined_msg="have you defined `shout1`?",
-        incorrect_msg="are you sure you assigned the correct value to `shout1`?"
-    )
-    test_object_after_expression(
-        "shout2",
-        context_vals=["congratulations", "you"],
-        undefined_msg="have you defined `shout2`?",
-        incorrect_msg="are you sure you assigned the correct value to `shout2`?"
-    )
-    test_object_after_expression(
-        "new_shout",
-        context_vals=["congratulations", "you"],
-        undefined_msg="have you defined `new_shout`?",
-        incorrect_msg="are you sure you assigned the correct value to `new_shout`?"
-    )
+fun_def = Ex().check_function_def("shout")
 
-# Test: shout() definition
-test_function_definition("shout", body=inner_test, results=[("congratulations", "you")], 
-wrong_result_msg="Are you returning `new_shout` in `shout()`?")
+# this function returns an SCT that will be used to test the body
+# of the function def, shout.
+def var_test(var_name):
+    incorrect_msg = "Did you assign the correct values to %s?"%var_name,
+    error_msg = "Did you define the variable `%s`?"%var_name
+    return has_equal_value(name = var_name, error_msg = error_msg, incorrect_msg = incorrect_msg)
+
+# test the body of function def, using set_context to set its arguments word1 and word2
+# multi could be replaced by typing the three has_equal_value tests manually
+# e.g. .has_equal_value(name = "shout1", incorrect_msg = "some message", error_msg = "some message")
+fun_def \
+    .check_body() \
+    .set_context(word1 = "congratulations", word2 = "you") \
+    .multi(var_test(name) for name in ["shout1", "shout2", "new_shout"])
+
+fun_def.call("f('congratulations', 'you')")
 
 # Test: shout() call
-test_function("shout")
+Ex().check_function("shout", 0)
 
 # Test: yell object
-test_object(
-    "yell",
-    incorrect_msg="Did you assign the result of `shout()` to `yell`?"
-)
+Ex().test_object(
+        "yell",
+        incorrect_msg="Did you assign the result of `shout()` to `yell`?"
+        )
 
 # Test: output
-test_output_contains(
+Ex().test_output_contains(
     "congratulations!!!you!!!",
     pattern = False,
     no_output_msg="Did you print out `yell`?"
 )
-
-success_msg("Great work!")
 
 ```
 
