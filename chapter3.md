@@ -217,7 +217,8 @@ new_fellowship = [member if len(member) >= 7 else '' for member in fellowship]
 # Test: list comprehension
 list_comp = Ex().check_list_comp(0, missing_msg="Did you create the list comprehension?")
 
-# Test if-else statement (MAIN DIFFERENCE FROM LAST EXERCISE)
+# MAIN DIFFERENCE FROM LAST EXERCISE ----------------------------------------------------------------
+# Test if-else statement
 msg_incorrect = 'Are you setting the string to be empty if it is greater than equal to 7 characters?'
 msg_error = 'Are you using `member` as your iterator variable?'
 list_comp.check_body() \
@@ -228,8 +229,9 @@ list_comp.check_body() \
 # For clarity, getting the if-else expression can be done with the SCT below
 # Ex().check_list_comp(0).check_body().check_if_exp(0)
 
-# Test iterator
+# ---------------------------------------------------------------------------------------------------
 
+# Test iterator
 list_comp.check_iter().has_equal_value(error_msg='Did you use `fellowship` as your iterable?')
 
 ```
@@ -364,7 +366,25 @@ dict_comp \
 
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:bbcf36c345
-## if-else (TODO)
+## if-else
+
+In python, there are two kinds of if-else expressions:
+
+```
+# inline if-else
+'yes' if True else 'no'
+
+# if-else block
+if True:
+    'yes'
+else:
+    'no'
+```
+
+Note that the body of an inline if-else always returns a value,
+while an if-else block will contain a number of expressions to run. 
+This is an important distinction, since it means you can use `has_equal_value` on the body of a inline if-else,
+but not an if-else block.
 
 
 *** =instructions
@@ -378,16 +398,53 @@ dict_comp \
 
 *** =sample_code
 ```{python}
+# inline if-else, where person1 loves beets
+food = 'beets'
+person1 = 'happy' if food == 'beets' else 'sad'
+
+# if-else block, where person2 hates beets
+if food == 'beets':
+    person2 = 'sad'
+else:
+    person2 = 'happy'
 
 ```
 
 *** =solution
 ```{python}
+# inline if-else, where person1 loves beets
+food = 'beets'
+person1 = 'happy' if food == 'beets' else 'sad'
+
+# if-else block, where person2 hates beets
+if food == 'beets':
+    person2 = 'sad'
+else:
+    person2 = 'happy'
 
 ```
 
 *** =sct
 ```{python}
+# check inline if expression
+inline_if = Ex().check_if_exp(0)    # inline if expression (top)
+
+if_block = Ex().check_if_else(0)    # if-else block statement (bottom)
+
+# check_cond
+inline_if.check_cond().has_equal_ast("food == 'beets')
+if_block.check_cond().has_equal_ast("food == 'beets')
+
+# check_body 
+# note that for if_block general expressions like assignments
+# can take place in the code, while an inline if is a single
+# expression that returns a value, so its body can't have an assigment
+inline_if.check_body().has_equal_ast("'happy'")
+if_block.check_body().has_equal_ast("person2 = 'sad'")
+
+# check orelse
+inline_if.check_orelse().has_equal_ast("'sad'")
+if_block.check_orelse().has_equal_ast("person2 = 'happy'")
 
 ```
 
