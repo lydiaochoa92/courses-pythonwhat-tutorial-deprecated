@@ -432,8 +432,8 @@ inline_if = Ex().check_if_exp(0)    # inline if expression (top)
 if_block = Ex().check_if_else(0)    # if-else block statement (bottom)
 
 # check_cond
-inline_if.check_cond().has_equal_ast("food == 'beets')
-if_block.check_cond().has_equal_ast("food == 'beets')
+inline_if.check_test().has_equal_ast("food == 'beets'")
+if_block.check_test().has_equal_ast("food == 'beets'")
 
 # check_body 
 # note that for if_block general expressions like assignments
