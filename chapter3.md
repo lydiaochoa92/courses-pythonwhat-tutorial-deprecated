@@ -453,6 +453,8 @@ if_block.check_orelse().has_equal_ast("person2 = 'happy'")
 --- type:NormalExercise lang:python xp:100 skills:2 key:d6419711b9
 ## if-else within a for loop
 
+**Note: this exercise is left in its entirety**
+
 Weights can be added to edges in a graph, typically indicating the "strength" of an edge. In NetworkX, the weight is indicated by the `'weight'` key in the metadata dictionary.
 
 Before attempting the exercise, use the IPython Shell to access the dictionary metadata of `T` and explore it, for instance by running the commands `T.edge[1][10]` and then `T.edge[10][1]`. Note how there's only one field, and now you're going to add another field, called `'weight'`.
@@ -525,12 +527,20 @@ pc = """T = __T"""
 
 for_loop = Ex().check_for_loop(0)
 
+# Check the iterator part (in the solution, T.edges(data=True))
+# Note that a copy of T was made named __T, since the solution code
+# mutates T (changes its contents).
+# the pre_code argument """T = __T""" says to re-assign T to be unmutated
+# the unmutated copy.
 for_loop.check_iter().test_expression_result(pre_code=pc)
-for_body = for_loop.check_body().check_if_else(0)
 
-for_body.check_test().has_equal_value(context_vals=[293,29200000])
-for_body.check_test().has_equal_value(context_vals=[2920000000,293])
-for_body.check_body().has_equal_value(expr_code="T.edge[232][293]['weight']")
+# Get the if-else statement within the for loop
+if_else = for_loop.check_body().check_if_else(0)
+
+# test if-else statement
+if_else.check_test().has_equal_value(context_vals=[293,29200000])
+if_else.check_test().has_equal_value(context_vals=[2920000000,293])
+if_else.check_body().has_equal_value(expr_code="T.edge[232][293]['weight']")
 
 success_msg("Excellent job! Being able to iterate over graphs like this to explore and alter their metadata is an important skill.")
 ```
