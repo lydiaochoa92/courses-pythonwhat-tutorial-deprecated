@@ -282,67 +282,34 @@ print(many_words)
 
 *** =sct
 ```{python}
-# All functions used here are defined in the pythonwhat Python package.
-# Documentation can also be found at github.com/datacamp/pythonwhat/wiki
 
-# All functions used here are defined in the pythonwhat Python package.
-# Documentation can also be found at github.com/datacamp/pythonwhat/wiki
+fun_def = Ex().check_function_def("gibberish")
 
-def inner_test():
-    context=[["luke", "leia"]]
-    def test_for_iter():
-        test_expression_result(extra_env = {'args': ("luke", "leia")})
-    def test_for_body():
-        test_object_after_expression("hodgepodge", extra_env = {'hodgepodge': ''}, context_vals='luke')
-    test_for_loop(
-        index=1,
-        for_iter=test_for_iter,
-        body=test_for_body
-    )
-    test_object_after_expression("hodgepodge", context_vals=context)
+fun_body = fun_def \
+    .check_body() \
+    .set_context(args = ['luke', 'leia']) \
+    .has_equal_value(name = "hodgepodge", error_msg = "did you define `hodgepodge`?")
 
-# Test: gibberish() definition
-test_function_definition("gibberish", body=inner_test,
-    results=[{'args':["luke", "leia"], 'kwargs':{}}])
+fun_body.check_for_loop(0) \
+    .multi(check_iter().has_equal_value(), 
+           # note SCT below requires both the vars word and hodgepodge to be defined, which is done by
+           # set_context and the pre_code arg of has_equal_value
+           check_body().set_context(word = 'luke').has_equal_value(pre_code = 'hodgepodge = "a"', name = 'hodgepodge'))
+
+fun_def.call("f('luke', 'leia')")
 
 # Test: gibberish() call 1
-test_function(
-    "gibberish",
-    index=1
-)
+Ex().check_function("gibberish", 0, signature=False).has_equal_ast('Did you call `gibberish("luke")`?')
 
 
 # Test: one_word object
-test_object("one_word")
+Ex().test_object("one_word")
 
 # Test: gibberish() call 2
-test_function(
-    "gibberish",
-    index=2,
-    not_called_msg="You don't have to change any of the predefined code.",
-    incorrect_msg="You don't have to change any of the predefined code."
-)
+Ex().check_function("gibberish", 1, signature=False).has_equal_value()
 
 # Test: many_words object
-test_object("many_words")
-
-# Test: print() call 1
-test_function(
-    "print",
-    index=1,
-    not_called_msg="You don't have to change any of the predefined code.",
-    incorrect_msg="You don't have to change any of the predefined code."
-)
-
-# Test: print() call 2
-test_function(
-    "print",
-    index=2,
-    not_called_msg="You don't have to change any of the predefined code.",
-    incorrect_msg="You don't have to change any of the predefined code."
-)
-
-success_msg("Great work!")
+Ex().test_object("many_words")
 
 ```
 
