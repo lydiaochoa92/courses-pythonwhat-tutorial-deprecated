@@ -528,10 +528,9 @@ pc = """T = __T"""
 for_loop = Ex().check_for_loop(0)
 
 # Check the iterator part (in the solution, T.edges(data=True))
-# Note that a copy of T was made named __T, since the solution code
-# mutates T (changes its contents).
-# the pre_code argument """T = __T""" says to re-assign T to be unmutated
-# the unmutated copy.
+# Note that a copy of T was made named __T, since the solution code mutates T (changes its contents).
+#   the pre_code argument """T = __T""" says to re-assign T to be the unmutated copy
+#   see: http://pythonwhat.readthedocs.io/en/latest/expression_tests.html#pre-code-fixing-mutations
 for_loop.check_iter().test_expression_result(pre_code=pc)
 
 # Get the if-else statement within the for loop
