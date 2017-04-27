@@ -555,36 +555,38 @@ plot_pop(fn, 'ARB')
 ```{python}
 
 # Test: plot_pop() definition
-fn_def = Ex().check_function_def('plot_pop').multi(check_args('filename'), check_args('country_code'))
+fn_def = Ex().check_function_def('plot_pop') \
+             .multi(check_args('filename'), check_args('country_code'))
 
 # Test function body
 fn_body = fn_def.check_body()
 
-fn_body.test_function("pandas.DataFrame")
-
+fn_body.check_function("pandas.DataFrame", 0)
 fn_body.check_for_loop(0).check_iter().has_equal_ast()
 
 loop_body = fn_body.check_for_loop(0).check_body()
 
 # Test: list comprehension
-loop_body.test_list_comp(iter_vars_names=True)
 list_comp = loop_body.check_list_comp(0)
-list_comp.check_body().set_context(tup = (91401583.0, 44.507921139002597)).has_equal_value('You do not need to modify the provided list comprehension.', error_msg='You do not need to modify the provided list comprehension.')
 
-loop_body.test_function('zip', do_eval=False)
-loop_body.test_function('list', do_eval=False)
-loop_body.test_function('data.append', do_eval=False)
+list_comp.has_context(exact_names = True)
+list_comp.check_body() \
+    .set_context(tup = (91401583.0, 44.507921139002597)) \
+    .has_equal_value('You do not need to modify the provided list comprehension.', 
+                     error_msg='You do not need to modify the provided list comprehension.')
+
+loop_body.check_function('zip', 0)
+loop_body.check_function('list', 0)
+loop_body.check_function('data.append', 0)
 
 # Test: fn object
-test_object("fn")
+Ex().test_object("fn")
 
 # Test: plot_pop() call 1
-test_function("plot_pop", index=1)
+Ex().check_function("plot_pop", 0)
 
 # Test: plot_pop() call 2
-test_function("plot_pop", index=2)
-
-success_msg("Great work!")
+Ex().check_function("plot_pop", 1)
 
 ```
 
@@ -592,6 +594,8 @@ success_msg("Great work!")
 
 --- type:NormalExercise lang:python xp:100 skills:2 key:681aeaaa00
 ## functions with for loops with if-else blocks
+
+**Exercise left in its entirity below**
 
 As Eric discussed, NetworkX also allows edges that begin and end on the same node; while this would be non-intuitive for a social network graph, it is useful to model data such as trip networks, in which individuals begin at one location and end in another.
 
