@@ -386,42 +386,34 @@ report_status(name="anakin", affiliation="sith lord", status="deceased")
 
 *** =sct
 ```{python}
-# All functions used here are defined in the pythonwhat Python package.
-# Documentation can also be found at github.com/datacamp/pythonwhat/wiki
 
-def inner_test():
-    test_function("print", index=1)
+fun_def = Ex().check_function_def('report_status')
 
-    def iter_test():
-        test_function("kwargs.items")
-        context=[{'name':"luke", 'affiliation':"jedi", 'status':"missing"}]
-        test_expression_result(context_vals = context)
+# Note that in check_function('print', 0), we are only checking that print was
+# used, not it's specific arguments.
+fun_bod = fun_def.check_body()
+fun_bod.check_function('print', 0)
+fun_bod.check_function('print', 1)
 
-    def body_test():
-        context=['name', 'luke']
-        test_expression_output(context_vals = context)
+for_loop = fun_bod.check_for_loop(0)
+for_loop.check_iter() \
+    .set_context(kwargs = dict(name = 'luke', affiliation = 'jedi', status = 'missing')) \
+    .has_equal_value() \
+    .check_function('kwargs.items', 0, signature = False)
 
-    test_for_loop(for_iter = iter_test, body = body_test)
-    test_function("print", index=2)
+for_loop.check_body() \
+    .set_context(key = 'name', value = 'luke') \
+    .has_equal_output()
 
-# Test: report_status() definition
-test_function_definition(
-    "report_status", body=inner_test,
-    outputs = [{'args': [], 'kwargs': {'name':"hugo", 'affiliation':"datacamp"}}])
+fun_def.call("f(name = 'hugo', affiliation = 'datacamp')")
 
+# Note that the tests below just verify report_status was called, not
+# the specific arguments used.
 # Test: report_status() call 1
-test_function(
-    "report_status",
-    index=1
-)
+Ex().check_function("report_status", 0)
 
 # Test: report_status() call 2
-test_function(
-    "report_status",
-    index=2
-)
-
-success_msg("Great work!")
+Ex().check_function("report_status", 1)
 
 ```
 
