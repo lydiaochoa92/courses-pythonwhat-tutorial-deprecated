@@ -165,7 +165,7 @@ fun_def = Ex().check_function_def("shout")
 # this function returns an SCT that will be used to test the body
 # of the function def, shout.
 def var_test(var_name):
-    incorrect_msg = "Did you assign the correct values to %s?"%var_name,
+    incorrect_msg = "Did you assign the correct values to %s?"%var_name
     error_msg = "Did you define the variable `%s`?"%var_name
     return has_equal_value(name = var_name, error_msg = error_msg, incorrect_msg = incorrect_msg)
 
@@ -175,7 +175,7 @@ def var_test(var_name):
 fun_def \
     .check_body() \
     .set_context(word1 = "congratulations", word2 = "you") \
-    .multi(var_test(name) for name in ["shout1", "shout2", "new_shout"])
+    .multi([var_test(name) for name in ["shout1", "shout2", "new_shout"]])
 
 fun_def.call("f('congratulations', 'you')")
 
