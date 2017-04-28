@@ -575,9 +575,9 @@ list_comp.check_body() \
     .has_equal_value('You do not need to modify the provided list comprehension.', 
                      error_msg='You do not need to modify the provided list comprehension.')
 
-loop_body.check_function('zip', 0)
-loop_body.check_function('list', 0)
-loop_body.check_function('data.append', 0)
+loop_body.check_function('zip', 0, signature = False)
+loop_body.check_function('list', 0, signature = False)
+loop_body.check_function('data.append', 0, signature = False)
 
 # Test: fn object
 Ex().test_object("fn")
