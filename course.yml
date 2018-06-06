@@ -1,8 +1,4 @@
-title                : courses pythonwhat tutorial
-instructors          :
- - michael@datacamp.com
-description          : This is an automatically generated demo course which will help you on your way to create an awesome DataCamp course.
-university           : DataCamp
-difficulty_level     : 2
-time_needed          : 1 hour
-programming_language : python
+title            : Deprecated pythonwhat tutorial
+instructors      :
+ - filip@datacamp.com
+description      : Visit <a href="https://pythonwhat.readthedocs.io">these docs</a> instead!
