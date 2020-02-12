@@ -1,0 +1,4 @@
+,issue_id,issue_number,issue_title,issue_created_by,issue_created_at,issue_assignee,issue_type,num_comments,comment_ids,issue_closed_at,issue_closed_by
+0,212137834,1,Testing objects cleanup,machow,2017-03-06 14:27:23,,Pull Request,0,,2017-03-06 14:29:44,machow
+1,237884993,2,Ch syntax,machow,2017-06-22 15:29:42,machow,Pull Request,0,,2017-06-22 15:29:55,machow
+2,558412061,3,Delete .gitignore,beccarobins,2020-01-31 22:41:16,,Pull Request,0,,2020-01-31 22:41:24,beccarobins
